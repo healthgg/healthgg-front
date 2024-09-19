@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
+import Layout from 'components/common/Layout'
 import { Main, OneRmCalc, ProteinCalc } from 'pages'
 import { Meal, MealCalc, MealDetail, MealList } from 'pages/meal'
 import { Exercise, ExerciseCalc, ExerciseDetail, ExerciseList } from 'pages/exercise-volume'
@@ -8,7 +9,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route>
+        <Route element={<Layout />}>
           <Route path={'/'} element={<Main />} />
           <Route path={'/1rm-calc'} element={<OneRmCalc />} />
           <Route path={'/protein-calc'} element={<ProteinCalc />} />
