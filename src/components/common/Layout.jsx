@@ -1,19 +1,25 @@
 import { Outlet } from 'react-router-dom'
+
 import styled from 'styled-components'
+
+import Navbar from './Navbar'
 
 const Layout = () => {
   return (
-    <WrapMain>
-      <Outlet />
-    </WrapMain>
+    <MaxWidthDiv>
+      <Navbar />
+      <WrapMain>
+        <Outlet />
+      </WrapMain>
+    </MaxWidthDiv>
   )
 }
 
 export default Layout
 
-const WrapMain = styled.main`
+const MaxWidthDiv = styled.div`
+  position: relative;
   margin: auto;
-  padding: 40px 20px;
   width: 360px;
   height: 100dvh;
   overflow-y: scroll;
@@ -27,4 +33,9 @@ const WrapMain = styled.main`
   &::-webkit-scrollbar-track {
     background-color: lightgray;
   }
+`
+
+const WrapMain = styled.main`
+  padding: 40px 20px;
+  height: calc(100dvh - 64px);
 `

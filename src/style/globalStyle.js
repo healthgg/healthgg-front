@@ -152,6 +152,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     font-style: normal;
     font-size: 100%;
+    color: #333331;
     vertical-align: baseline;
     vertical-align: baseline;
     box-sizing: border-box;
@@ -159,6 +160,7 @@ const GlobalStyle = createGlobalStyle`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background-color: transparent;
   }
 
   /* HTML5 display-role reset for older browsers */
@@ -185,6 +187,10 @@ const GlobalStyle = createGlobalStyle`
 
   textarea {
     resize: none;
+  }
+
+  button {
+    cursor: pointer;
   }
 
   a:link, a:visited, a:hover, a:active {
