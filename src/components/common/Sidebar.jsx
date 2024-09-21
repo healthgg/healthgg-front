@@ -17,17 +17,13 @@ const Sidebar = ({ onClose }) => {
         <img src={iconHealth} alt="바벨 아이콘" width={100} height={100} />
         <MenuUl>
           <li>
-            <MenuButton type="button" active={pathname === '/' ? 'true' : 'false'} onClick={() => navigate('/')}>
+            <MenuButton type="button" active={pathname === '/'} onClick={() => navigate('/')}>
               <img src={iconHome} alt="집 아이콘" width={28} height={28} />
               <span>홈</span>
             </MenuButton>
           </li>
           <li>
-            <MenuButton
-              type="button"
-              active={pathname === '/protein-calc' ? 'true' : 'false'}
-              onClick={() => navigate('/protein-calc')}
-            >
+            <MenuButton type="button" active={pathname === '/protein-calc'} onClick={() => navigate('/protein-calc')}>
               <img src={iconProtein} alt="프로틴 아이콘" width={28} height={28} />
               <span>프로틴 섭취량 계산기</span>
             </MenuButton>
@@ -35,7 +31,7 @@ const Sidebar = ({ onClose }) => {
           <li>
             <MenuButton
               type="button"
-              active={pathname === '/exercise-volume' ? 'true' : 'false'}
+              active={pathname === '/exercise-volume'}
               onClick={() => navigate('/exercise-volume')}
             >
               <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
@@ -43,21 +39,13 @@ const Sidebar = ({ onClose }) => {
             </MenuButton>
           </li>
           <li>
-            <MenuButton
-              type="button"
-              active={pathname === '/1rm-calc' ? 'true' : 'false'}
-              onClick={() => navigate('/1rm-calc')}
-            >
+            <MenuButton type="button" active={pathname === '/1rm-calc'} onClick={() => navigate('/1rm-calc')}>
               <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
               <span>1RM 계산기</span>
             </MenuButton>
           </li>
           <li>
-            <MenuButton
-              type="button"
-              active={pathname === '/meal' ? 'true' : 'false'}
-              onClick={() => navigate('/meal')}
-            >
+            <MenuButton type="button" active={pathname === '/meal'} onClick={() => navigate('/meal')}>
               <img src={iconMeal} alt="접시 아이콘" width={28} height={28} />
               <span>커스텀 식단 만들기</span>
             </MenuButton>
@@ -115,6 +103,6 @@ const MenuButton = styled.button`
   span {
     font-size: 18px;
     font-weight: 600;
-    color: ${({ theme, active }) => (active === 'true' ? theme.colors.mainBlue : theme.colors.typoBlack)};
+    color: ${({ theme, active }) => (active ? theme.colors.mainBlue : theme.colors.typoBlack)};
   }
 `
