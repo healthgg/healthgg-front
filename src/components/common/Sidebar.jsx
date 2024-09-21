@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
@@ -9,11 +8,7 @@ import { iconCalc, iconHealth, iconHome, iconMeal, iconProtein } from 'assets/ic
 const Sidebar = ({ onClose }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const url = location.pathname
-
-  useEffect(() => {
-    console.log(url)
-  }, [url])
+  const { pathname } = location
 
   return (
     <BackgroundDiv onClick={onClose}>
@@ -22,7 +17,7 @@ const Sidebar = ({ onClose }) => {
         <img src={iconHealth} alt="바벨 아이콘" width={100} height={100} />
         <MenuUl>
           <li>
-            <MenuButton type="button" active={url === '/' ? 'true' : 'false'} onClick={() => navigate('/')}>
+            <MenuButton type="button" active={pathname === '/' ? 'true' : 'false'} onClick={() => navigate('/')}>
               <img src={iconHome} alt="집 아이콘" width={28} height={28} />
               <span>홈</span>
             </MenuButton>
@@ -30,7 +25,7 @@ const Sidebar = ({ onClose }) => {
           <li>
             <MenuButton
               type="button"
-              active={url === '/protein-calc' ? 'true' : 'false'}
+              active={pathname === '/protein-calc' ? 'true' : 'false'}
               onClick={() => navigate('/protein-calc')}
             >
               <img src={iconProtein} alt="프로틴 아이콘" width={28} height={28} />
@@ -40,7 +35,7 @@ const Sidebar = ({ onClose }) => {
           <li>
             <MenuButton
               type="button"
-              active={url === '/exercise-volume' ? 'true' : 'false'}
+              active={pathname === '/exercise-volume' ? 'true' : 'false'}
               onClick={() => navigate('/exercise-volume')}
             >
               <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
@@ -50,7 +45,7 @@ const Sidebar = ({ onClose }) => {
           <li>
             <MenuButton
               type="button"
-              active={url === '/1rm-calc' ? 'true' : 'false'}
+              active={pathname === '/1rm-calc' ? 'true' : 'false'}
               onClick={() => navigate('/1rm-calc')}
             >
               <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
@@ -58,7 +53,11 @@ const Sidebar = ({ onClose }) => {
             </MenuButton>
           </li>
           <li>
-            <MenuButton type="button" active={url === '/meal' ? 'true' : 'false'} onClick={() => navigate('/meal')}>
+            <MenuButton
+              type="button"
+              active={pathname === '/meal' ? 'true' : 'false'}
+              onClick={() => navigate('/meal')}
+            >
               <img src={iconMeal} alt="접시 아이콘" width={28} height={28} />
               <span>커스텀 식단 만들기</span>
             </MenuButton>

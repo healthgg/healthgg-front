@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 
 import styled from 'styled-components'
 
+import Footer from './Footer'
 import Navbar from './Navbar'
 
 const Layout = () => {
@@ -11,6 +12,7 @@ const Layout = () => {
       <WrapMain>
         <Outlet />
       </WrapMain>
+      <Footer />
     </MaxWidthDiv>
   )
 }
@@ -37,5 +39,5 @@ const MaxWidthDiv = styled.div`
 
 const WrapMain = styled.main`
   padding: 40px 20px;
-  height: calc(100dvh - 64px);
+  height: calc(100dvh - 144px);
 `

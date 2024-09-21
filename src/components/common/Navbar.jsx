@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
 import styled from 'styled-components'
 
 import { FaArrowLeft } from 'react-icons/fa6'
@@ -8,16 +10,17 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import Portal from './Portal'
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const [showSidebar, setShowSidebar] = useState(false)
 
   const toggleSidebar = () => setShowSidebar(!showSidebar)
 
   return (
     <WrapNav>
-      <button type="button">
+      <button type="button" onClick={() => navigate(-1)}>
         <StyledArrowLeft />
       </button>
-      <TitleSpan>Health.GG</TitleSpan>
+      <TitleSpan onClick={() => navigate('/')}>Health.GG</TitleSpan>
       <button type="button" onClick={toggleSidebar}>
         <StyledHamburger />
       </button>
@@ -38,6 +41,7 @@ const WrapNav = styled.nav`
 
 const TitleSpan = styled.span`
   font-weight: 700;
+  cursor: pointer;
 `
 
 const StyledArrowLeft = styled(FaArrowLeft)`
