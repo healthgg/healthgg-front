@@ -10,6 +10,8 @@ import styled from 'styled-components'
 
 import { getMain } from 'api/main'
 
+import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
+
 import { SectionTitle, ContentCard } from 'components/common'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
 
@@ -48,13 +50,19 @@ const Main = () => {
       const { exerciseVolume = [], foodBoardList = [], totalvistor = 0 } = data ?? {}
       setTotalVisitor(totalvistor)
       setBestList([
-        { type: 'food', name: '🍜 BEST 식단', path: '/meal', boardArr: foodBoardList, urlArrsKey: 'food_imageurl' },
+        {
+          type: 'food',
+          name: '🍜 BEST 식단',
+          path: '/meal/list',
+          boardArr: foodBoardList,
+          urlArrsKey: FOOD_IMAGES_KEY,
+        },
         {
           type: 'exercise_volume',
           name: '💪 BEST 운동볼륨',
-          path: '/exercise-volume',
+          path: '/exercise-volume/list',
           boardArr: exerciseVolume,
-          urlArrsKey: 'fitness_machine_urls',
+          urlArrsKey: EXERCISE_IMAGES_KEY,
         },
       ])
     }
