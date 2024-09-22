@@ -192,7 +192,7 @@ const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
   }
-
+  
   a:link, a:visited, a:hover, a:active {
     text-decoration: none;
   }
