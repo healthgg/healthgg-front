@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { v4 as uuidv4 } from 'uuid'
+
 import styled from 'styled-components'
 
 import { IoCloseOutline } from 'react-icons/io5'
@@ -10,46 +12,28 @@ const Sidebar = ({ onClose }) => {
   const location = useLocation()
   const { pathname } = location
 
+  const sidebarList = [
+    { name: '홈', path: '/', src: iconHome, alt: '집' },
+    { name: '프로틴 섭취량 계산기', path: '/protein-calc', src: iconProtein, alt: '프로틴' },
+    { name: '운동볼륨 계산기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
+    { name: '1RM 계산기', path: '/1rm-calc', src: iconCalc, alt: '계산기' },
+    { name: '커스텀 식단 만들기', path: '/meal', src: iconMeal, alt: '접시' },
+  ]
+
   return (
     <BackgroundDiv onClick={onClose}>
       <SidebarSection>
         <StyledClose onClick={onClose} />
         <img src={iconHealth} alt="바벨 아이콘" width={100} height={100} />
         <MenuUl>
-          <li>
-            <MenuButton type="button" active={pathname === '/'} onClick={() => navigate('/')}>
-              <img src={iconHome} alt="집 아이콘" width={28} height={28} />
-              <span>홈</span>
-            </MenuButton>
-          </li>
-          <li>
-            <MenuButton type="button" active={pathname === '/protein-calc'} onClick={() => navigate('/protein-calc')}>
-              <img src={iconProtein} alt="프로틴 아이콘" width={28} height={28} />
-              <span>프로틴 섭취량 계산기</span>
-            </MenuButton>
-          </li>
-          <li>
-            <MenuButton
-              type="button"
-              active={pathname === '/exercise-volume'}
-              onClick={() => navigate('/exercise-volume')}
-            >
-              <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
-              <span>운동볼륨 계산기</span>
-            </MenuButton>
-          </li>
-          <li>
-            <MenuButton type="button" active={pathname === '/1rm-calc'} onClick={() => navigate('/1rm-calc')}>
-              <img src={iconCalc} alt="계산기 아이콘" width={28} height={28} />
-              <span>1RM 계산기</span>
-            </MenuButton>
-          </li>
-          <li>
-            <MenuButton type="button" active={pathname === '/meal'} onClick={() => navigate('/meal')}>
-              <img src={iconMeal} alt="접시 아이콘" width={28} height={28} />
-              <span>커스텀 식단 만들기</span>
-            </MenuButton>
-          </li>
+          {sidebarList.map((menu) => (
+            <li key={uuidv4()}>
+              <MenuButton type="button" active={pathname === menu.path} onClick={() => navigate(menu.path)}>
+                <img src={menu.src} alt={`${menu.alt} 아이콘`} width={28} height={28} />
+                <span>{menu.name}</span>
+              </MenuButton>
+            </li>
+          ))}
         </MenuUl>
       </SidebarSection>
     </BackgroundDiv>

@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { io } from 'socket.io-client'
 
+import { v4 as uuidv4 } from 'uuid'
+
 import styled from 'styled-components'
 
 import { getMain } from 'api/main'
+
+import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
 
 import { SectionTitle, ContentCard } from 'components/common'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
@@ -15,36 +19,56 @@ const Main = () => {
   const navigate = useNavigate()
 
   const [currentVisitor, setCurrentVisitor] = useState(0)
+  const [totalVisitor, setTotalVisitor] = useState(0)
+  const [bestList, setBestList] = useState([])
 
-  const { data, isLoading } = useQuery({
+  const lnbList = [
+    { name: '프로틴 섭취량\n계산기', path: '/protein-calc', src: iconProtein, alt: '프로틴' },
+    { name: '운동볼륨\n계산기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
+    { name: '1RM\n계산기', path: '/1rm-calc', src: iconCalc, alt: '계산기' },
+    { name: '커스텀\n식단 만들기', path: '/meal', src: iconMeal, alt: '접시' },
+  ]
+
+  // todo: 에러페이지 제작 후 isError || error일 때 해당 페이지로 랜딩
+  const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ['getMain'],
     queryFn: () => getMain(),
-    throwOnError: (error) => {
-      // 500일 경우 error페이지로 랜딩 or 모달 띄우기
-    },
+    throwOnError: (err) => console.error(err),
   })
-
-  const { exerciseVolume = [], foodBoardList = [], totalvistor = 0 } = data ?? {}
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_WEBSOCKET_URL)
-
-    // 소켓이 연결되어 있지 않으면 연결
-    if (!socket.connected) {
-      socket.connect()
-    }
-    // 소켓 연결
-    socket.on('connect', () => {})
-    // 서버로부터 데이터 수신
     socket.on('clientsCount', (count) => setCurrentVisitor(count))
-    // 소켓 연결 해제
     return () => {
-      socket.off('connect')
       socket.off('clientsCount')
       socket.disconnect()
     }
   }, [])
 
+  useEffect(() => {
+    if (isSuccess) {
+      const { exerciseVolume = [], foodBoardList = [], totalvistor = 0 } = data ?? {}
+      setTotalVisitor(totalvistor)
+      setBestList([
+        {
+          type: 'food',
+          name: '🍜 BEST 식단',
+          path: '/meal/list',
+          boardArr: foodBoardList,
+          urlArrsKey: FOOD_IMAGES_KEY,
+        },
+        {
+          type: 'exercise_volume',
+          name: '💪 BEST 운동볼륨',
+          path: '/exercise-volume/list',
+          boardArr: exerciseVolume,
+          urlArrsKey: EXERCISE_IMAGES_KEY,
+        },
+      ])
+    }
+  }, [isSuccess, data])
+
+  // todo 로딩 스피너 또는 스켈레톤 UI
   return isLoading ? (
     <p>로딩중</p>
   ) : (
@@ -57,90 +81,42 @@ const Main = () => {
           </div>
           <div>
             <span>전체 방문자</span>
-            <span>{totalvistor}</span>
+            <span>{totalVisitor}</span>
           </div>
         </VisitorSection>
         <LnbUl>
-          <li>
-            <LnbButton type="button" onClick={() => navigate('/protein-calc')}>
-              <img src={iconProtein} alt="계산기 아이콘" width={26} height={26} />
-              <span>
-                프로틴 섭취량
-                <br />
-                계산기
-              </span>
-            </LnbButton>
-          </li>
-          <li>
-            <LnbButton type="button" onClick={() => navigate('/exercise-volume')}>
-              <img src={iconCalc} alt="계산기 아이콘" width={26} height={26} />
-              <span>
-                운동볼륨
-                <br />
-                계산기
-              </span>
-            </LnbButton>
-          </li>
-          <li>
-            <LnbButton type="button" onClick={() => navigate('/1rm-calc')}>
-              <img src={iconCalc} alt="계산기 아이콘" width={26} height={26} />
-              <span>
-                1RM
-                <br />
-                계산기
-              </span>
-            </LnbButton>
-          </li>
-          <li>
-            <LnbButton type="button" onClick={() => navigate('/meal')}>
-              <img src={iconMeal} alt="계산기 아이콘" width={26} height={26} />
-              <span>
-                커스텀
-                <br />
-                식단 만들기
-              </span>
-            </LnbButton>
-          </li>
+          {lnbList.map((menu) => (
+            <li key={uuidv4()}>
+              <LnbButton type="button" onClick={() => navigate(menu.path)}>
+                <img src={menu.src} alt={`${menu.alt} 아이콘`} width={26} height={26} />
+                <span>{menu.name}</span>
+              </LnbButton>
+            </li>
+          ))}
         </LnbUl>
-        <section>
-          <SectionTitle showMore onClick={() => navigate('/meal')}>
-            🍜 BEST 식단
-          </SectionTitle>
-          {/* todo: 추후 가로 슬라이드 구현해서 4개 모두 출력 */}
-          <BestSlideDiv>
-            {foodBoardList.slice(0, 2).map((board, key) => (
-              <ContentCard
-                key={key}
-                type="food"
-                isQuad
-                urlArrs={board?.food_imageurl ?? []}
-                title={board?.title ?? ''}
-                desc={board?.sub_title ?? ''}
-                boardId={board?.board_id ?? ''}
-                showBtn
-              />
-            ))}
-          </BestSlideDiv>
-        </section>
-        <section>
-          <SectionTitle showMore onClick={() => navigate('/exercise-volume')}>
-            💪 BEST 운동볼륨
-          </SectionTitle>
-          <BestSlideDiv>
-            {exerciseVolume.slice(0, 2).map((board, key) => (
-              <ContentCard
-                key={key}
-                type="exercise_volume"
-                isQuad
-                urlArrs={board?.fitness_machine_urls ?? []}
-                title={board?.title ?? ''}
-                desc={board?.sub_title ?? ''}
-                boardId={board?.board_id ?? ''}
-                showBtn
-              />
-            ))}
-          </BestSlideDiv>
-        </section>
+        <BestSection>
+          {bestList.map((list) => (
+            <div>
+              <SectionTitle showMore onClick={() => navigate(list.path)}>
+                {list.name}
+              </SectionTitle>
+              {/* todo: 추후 가로 슬라이드 구현해서 4개 모두 출력 */}
+              <BestSlideDiv>
+                {list.boardArr.slice(0, 2).map((board) => (
+                  <ContentCard
+                    key={uuidv4()}
+                    type={list.type}
+                    isQuad
+                    urlArrs={board?.[list.urlArrsKey] ?? []}
+                    title={board?.title ?? ''}
+                    desc={board?.sub_title ?? ''}
+                    boardId={board?.board_id ?? ''}
+                  />
+                ))}
+              </BestSlideDiv>
+            </div>
+          ))}
+        </BestSection>
       </MainWrap>
     )
   )
@@ -196,7 +172,14 @@ const LnbButton = styled.button`
   & > span {
     font-size: 11px;
     font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+    white-space: pre;
   }
+`
+
+const BestSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
 `
 
 const BestSlideDiv = styled.div`
