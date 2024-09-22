@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import styled from 'styled-components'
 
 import Image from './Image'
@@ -7,8 +9,8 @@ const QuadImages = ({ urlArrs }) => {
 
   return (
     <QuadImagesWrap>
-      {srcArrs.map((url, idx) => (
-        <Image key={idx} src={url} alt="사분할 이미지" />
+      {srcArrs.map((url) => (
+        <Image key={uuidv4()} src={url} alt="사분할 이미지" />
       ))}
     </QuadImagesWrap>
   )
