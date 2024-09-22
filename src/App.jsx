@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Layout from 'components/common/Layout'
+import { Layout } from 'components/common'
 import { Main, OneRmCalc, ProteinCalc } from 'pages'
 import { Meal, MealCalc, MealDetail, MealList } from 'pages/meal'
 import { Exercise, ExerciseCalc, ExerciseDetail, ExerciseList } from 'pages/exercise-volume'
