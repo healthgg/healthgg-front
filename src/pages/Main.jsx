@@ -111,7 +111,6 @@ const Main = () => {
                     title={board?.title ?? ''}
                     desc={board?.sub_title ?? ''}
                     boardId={board?.board_id ?? ''}
-                    showBtn
                   />
                 ))}
               </BestSlideDiv>
