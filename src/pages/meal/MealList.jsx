@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getMealBest } from 'api/meal'
 
-import { PageTitle } from 'components/common'
-import { BoardList } from 'components/list'
+import { PageTitle, BoardList } from 'components'
 
 const MealList = () => {
   // todo: 에러페이지 제작 후 isError || error일 때 해당 페이지로 랜딩

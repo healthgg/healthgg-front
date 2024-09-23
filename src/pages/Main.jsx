@@ -10,9 +10,9 @@ import styled from 'styled-components'
 
 import { getMain } from 'api/main'
 
-import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
+import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_ARR_KEY } from 'constants/responseKeys'
 
-import { SectionTitle, ContentCard } from 'components/common'
+import { SectionTitle, ContentCard } from 'components'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
 
 const Main = () => {
@@ -55,14 +55,14 @@ const Main = () => {
           name: '🍜 BEST 식단',
           path: '/meal/list',
           boardArr: foodBoardList,
-          urlArrsKey: FOOD_IMAGES_KEY,
+          urlArrsKey: FOOD_IMG_ARR_KEY,
         },
         {
           type: 'exercise_volume',
           name: '💪 BEST 운동볼륨',
           path: '/exercise-volume/list',
           boardArr: exerciseVolume,
-          urlArrsKey: EXERCISE_IMAGES_KEY,
+          urlArrsKey: EXERCISE_IMG_ARR_KEY,
         },
       ])
     }
@@ -96,7 +96,7 @@ const Main = () => {
         </LnbUl>
         <BestSection>
           {bestList.map((list) => (
-            <div>
+            <div key={uuidv4()}>
               <SectionTitle showMore onClick={() => navigate(list.path)}>
                 {list.name}
               </SectionTitle>

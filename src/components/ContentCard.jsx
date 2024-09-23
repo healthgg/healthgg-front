@@ -14,7 +14,7 @@ const ContentCard = ({ type, isQuad, urlArrs, src, alt, title, desc, boardId, sh
   return (
     <ContentCardWrap>
       {isQuad ? <QuadImages urlArrs={urlArrs} /> : <Image src={src} alt={alt} />}
-      <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}?id=${boardId}`) : ''}>
+      <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
         <h2>{title}</h2>
         {showBtn && <Button color="mainBlue">선택</Button>}
       </TitleDiv>
