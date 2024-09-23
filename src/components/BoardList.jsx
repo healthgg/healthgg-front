@@ -2,12 +2,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import styled from 'styled-components'
 
-import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
+import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_ARR_KEY } from 'constants/responseKeys'
 
 import ContentCard from './ContentCard'
 
 const BoardList = ({ type, path, list }) => {
-  const imagesKey = type === 'food' ? FOOD_IMAGES_KEY : EXERCISE_IMAGES_KEY
+  const imagesKey = type === 'food' ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_ARR_KEY
 
   return (
     <WrapBoardList>
