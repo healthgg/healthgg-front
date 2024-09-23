@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
 
-import { ContentCard } from 'components/common'
+import ContentCard from './ContentCard'
 
 const BoardList = ({ type, path, list }) => {
   const imagesKey = type === 'food' ? FOOD_IMAGES_KEY : EXERCISE_IMAGES_KEY

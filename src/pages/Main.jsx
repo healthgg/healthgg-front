@@ -12,7 +12,7 @@ import { getMain } from 'api/main'
 
 import { FOOD_IMAGES_KEY, EXERCISE_IMAGES_KEY } from 'constants/responseKeys'
 
-import { SectionTitle, ContentCard } from 'components/common'
+import { SectionTitle, ContentCard } from 'components'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
 
 const Main = () => {
@@ -96,7 +96,7 @@ const Main = () => {
         </LnbUl>
         <BestSection>
           {bestList.map((list) => (
-            <div>
+            <div key={uuidv4()}>
               <SectionTitle showMore onClick={() => navigate(list.path)}>
                 {list.name}
               </SectionTitle>
