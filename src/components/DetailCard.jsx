@@ -21,7 +21,6 @@ const DetailCard = ({ type, list }) => {
   ]
   const isTypeFood = type === 'food'
   const targetArr = isTypeFood ? nurientNamesArr : routineNamesArr
-  console.log('🚀 ~ DetailCard ~ targetArr:', list)
   const imagesKey = isTypeFood ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_KEY
 
   return (
