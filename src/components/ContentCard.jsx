@@ -26,7 +26,6 @@ const ContentCard = ({ type, isQuad, urlArrs, src, alt, title, desc, boardId, sh
 export default ContentCard
 
 const ContentCardWrap = styled.div`
-  width: 154px;
   & > p {
     margin-top: 8px;
     width: 100%;
@@ -42,6 +41,7 @@ const TitleDiv = styled.div`
   justify-content: space-between;
   margin-top: 8px;
   & > h2 {
+    // todo 버튼 유무에 따른 width 분기
     width: calc(100% - 40px);
     font-size: 20px;
     font-weight: ${({ theme }) => theme.fontWeight.title};
