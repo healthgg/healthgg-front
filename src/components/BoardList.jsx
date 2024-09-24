@@ -6,7 +6,7 @@ import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_ARR_KEY } from 'constants/responseKeys'
 
 import ContentCard from './ContentCard'
 
-const BoardList = ({ type, path, list }) => {
+const BoardList = ({ type, list }) => {
   const imagesKey = type === 'food' ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_ARR_KEY
 
   return (

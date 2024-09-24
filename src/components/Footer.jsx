@@ -75,7 +75,9 @@ export default Footer
 const WrapFooter = styled.footer`
   position: fixed;
   bottom: 0;
-  width: 360px;
+  min-width: 320px;
+  width: 100dvh;
+  max-width: 430px;
   height: 80px;
   & > section {
     width: 100%;

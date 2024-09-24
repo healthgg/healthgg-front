@@ -48,7 +48,9 @@ const BackgroundDiv = styled.div`
   right: 0;
   left: 0;
   margin: auto;
-  width: 360px;
+  min-width: 320px;
+  width: 100dvh;
+  max-width: 430px;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
 `
