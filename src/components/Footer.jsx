@@ -73,12 +73,13 @@ const Footer = () => {
 export default Footer
 
 const WrapFooter = styled.footer`
-  position: fixed;
+  position: sticky;
   bottom: 0;
   min-width: 320px;
-  width: 100dvh;
+  width: 100%;
   max-width: 430px;
   height: 80px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px -3px 8px 0px;
   & > section {
     width: 100%;
     height: 100%;
