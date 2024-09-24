@@ -48,7 +48,15 @@
     // [error] Prop spreading is forbidden
     "react/jsx-props-no-spreading": "off",
     // 파일의 경로가 틀렸는지 확인하는 옵션 false
-    "import/no-unresolved": ["error", { "caseSensitive": false }]
+    "import/no-unresolved": ["error", { "caseSensitive": false }],
+    // 'jsx-a11y/label-has-associated-control' 규칙 추가
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "controlComponents": ["Input"], // 커스텀 컴포넌트의 이름이 있을 경우 지정
+        "required": true // 관련된 입력 컨트롤이 반드시 있어야 함
+      }
+    ]
   },
   // 절대경로 설정
   "settings": {

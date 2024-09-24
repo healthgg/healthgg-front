@@ -186,7 +186,6 @@ const BestSection = styled.section`
 `
 
 const BestSlideDiv = styled.div`
-  border: 1px solid red;
   display: flex;
   gap: 16px;
   & > div {

@@ -42,16 +42,18 @@ const Meal = () => {
     ],
   })
   const [isChosen, setIsChosen] = useState(false)
+  const [keyword, setKeyword] = useState('')
 
   const nutrientList = ['전체', '단백질', '탄수화물', '지방', '비타민']
   const repastList = [BREAKFAST, LUNCH, DINNER]
 
   const setCurTab = (tabType, value) => (tabType === 'main' ? setCurMainTab(value) : setCurSubTab(value))
 
+  const onChangeKeyword = (e) => setKeyword(e.target.value)
+
   useEffect(() => {
     const allSelected = [...userSelectedList[BREAKFAST], ...userSelectedList[LUNCH], ...userSelectedList[DINNER]]
     setIsChosen(allSelected.length > 0)
-    console.log(userSelectedList[curSubTab])
   }, [userSelectedList])
 
   return (
@@ -81,17 +83,24 @@ const Meal = () => {
         ) : (
           userSelectedList?.[curSubTab].map((value) => (
             <li key={uuidv4()}>
-              <div>
+              <SelectedContDiv>
                 <p>{value.food_name}</p>
                 <Image src={value.food_imageurl} alt={`${value.food_name} 이미지`} width={85} height={60} />
-                <button type="button">
+                <CloseButton type="button">
                   <IoCloseOutline />
-                </button>
-              </div>
+                </CloseButton>
+              </SelectedContDiv>
             </li>
           ))
         )}
       </SelectedUl>
+      {/* <div>
+        <label htmlFor="radio1">name</label>
+        <input type="radio" id="radio1" name="name" value="value" />
+      </div> */}
+      <div>
+        {/* <input value={onChangeKeyword} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeWord} /> */}
+      </div>
     </>
   )
 }
@@ -141,14 +150,34 @@ const LinedButton = styled.button`
 `
 
 const SelectedUl = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 20px 10px;
+  min-height: 120px;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.bgWhite};
+`
+
+const SelectedContDiv = styled.div`
+  position: relative;
+  width: 100px;
+  & > p {
+    padding: 0 3px 5px 3px;
+    text-align: left;
+    font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+  }
+`
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 5px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  height: 100px;
-  background-color: ${({ theme }) => theme.colors.bgWhite};
-  border-radius: 5px;
-  text-align: center;
-  & > li {
-    flex: 1;
-  }
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: ${({ theme }) => theme.colors.mainBlue};
+  color: ${({ theme }) => theme.colors.bgWhite};
 `
