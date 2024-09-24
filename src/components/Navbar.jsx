@@ -32,11 +32,14 @@ const Navbar = () => {
 export default Navbar
 
 const WrapNav = styled.nav`
+  position: sticky;
+  top: 0;
   display: grid;
   grid-template-columns: 60px 1fr 60px;
   align-items: center;
+  width: 100%;
   height: 64px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px 0px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 8px 0px;
 `
 
 const TitleSpan = styled.span`
