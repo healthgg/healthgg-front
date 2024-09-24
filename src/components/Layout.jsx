@@ -31,6 +31,7 @@ const MaxWidthDiv = styled.div`
 const WrapMain = styled.main`
   height: calc(100dvh - 144px); // nav + footer
   padding: 30px 20px;
+  overflow-x: hidden;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 2px;
