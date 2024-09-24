@@ -28,9 +28,9 @@ export default ContentCard
 const ContentCardWrap = styled.div`
   width: 154px;
   & > p {
-    margin-top: 2px;
+    margin-top: 4px;
     width: 100%;
-    font-size: 11px;
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,10 +40,10 @@ const ContentCardWrap = styled.div`
 const TitleDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 8px;
   & > h2 {
     width: calc(100% - 40px);
-    font-size: 15px;
+    font-size: 20px;
     font-weight: ${({ theme }) => theme.fontWeight.title};
     white-space: nowrap;
     overflow: hidden;
@@ -54,7 +54,7 @@ const TitleDiv = styled.div`
       align-items: center;
       padding: 0 4px;
       height: 18px;
-      font-size: 11px;
+      font-size: 14px;
     }
   }
 `
