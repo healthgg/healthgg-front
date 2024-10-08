@@ -21,23 +21,22 @@ export default Layout
 
 const MaxWidthDiv = styled.div`
   position: relative;
-  margin: auto;
-  width: 360px;
-  height: 100%;
+  margin: 0 auto;
+  min-width: 320px;
+  max-width: 430px;
+  min-height: 100dvh;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 5px 18px -7px;
 `
 
 const WrapMain = styled.main`
-  padding: 40px 20px;
-  height: calc(100dvh - 144px);
-  overflow-y: scroll;
-  box-shadow: rgba(0, 0, 0, 0.8) 0px 5px 18px -7px;
+  height: calc(100dvh - 144px); // nav + footer
+  padding: 30px 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
   &::-webkit-scrollbar {
     width: 2px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: gray;
-  }
-  &::-webkit-scrollbar-track {
     background-color: lightgray;
   }
 `

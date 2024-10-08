@@ -28,7 +28,7 @@ const Sidebar = ({ onClose }) => {
         <MenuUl>
           {sidebarList.map((menu) => (
             <li key={uuidv4()}>
-              <MenuButton type="button" active={pathname === menu.path} onClick={() => navigate(menu.path)}>
+              <MenuButton type="button" $active={pathname === menu.path} onClick={() => navigate(menu.path)}>
                 <img src={menu.src} alt={`${menu.alt} 아이콘`} width={28} height={28} />
                 <span>{menu.name}</span>
               </MenuButton>
@@ -48,7 +48,8 @@ const BackgroundDiv = styled.div`
   right: 0;
   left: 0;
   margin: auto;
-  width: 360px;
+  min-width: 320px;
+  max-width: 430px;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
 `
@@ -87,6 +88,6 @@ const MenuButton = styled.button`
   span {
     font-size: 18px;
     font-weight: 600;
-    color: ${({ theme, active }) => (active ? theme.colors.mainBlue : theme.colors.typoBlack)};
+    color: ${({ theme, $active }) => ($active ? theme.colors.mainBlue : theme.colors.typoBlack)};
   }
 `

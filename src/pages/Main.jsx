@@ -127,7 +127,7 @@ export default Main
 const MainWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 30px;
 `
 
 const VisitorSection = styled.section`
@@ -156,6 +156,9 @@ const VisitorSection = styled.section`
 const LnbUl = styled.ul`
   display: flex;
   gap: 10px;
+  & > li {
+    flex: 1;
+  }
 `
 
 const LnbButton = styled.button`
@@ -164,9 +167,9 @@ const LnbButton = styled.button`
   gap: 5px;
   align-items: center;
   justify-content: center;
-  width: calc(290px / 4);
-  height: calc(290px / 4);
-  padding: 5px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 5px;
   background-color: ${({ theme }) => theme.colors.bgWhite};
   border-radius: 5px;
   & > span {
@@ -179,10 +182,13 @@ const LnbButton = styled.button`
 const BestSection = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 30px;
 `
 
 const BestSlideDiv = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 16px;
+  & > div {
+    flex: 1;
+  }
 `
