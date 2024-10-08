@@ -39,10 +39,14 @@ const Footer = () => {
               <StyledEmail />
             </a>
             <IconBtn type="button">
-              <img src={iconKakao} alt="카카오톡 로고" />
+              <a href="https://open.kakao.com/o/gaFKNPQg" target="_blank" rel="noopener noreferrer">
+                <img src={iconKakao} alt="카카오톡 로고" />
+              </a>
             </IconBtn>
             <IconBtn type="button">
-              <img src={iconGithub} alt="깃허브 로고" />
+              <a href="https://github.com/healthgg" target="_blank" rel="noopener noreferrer">
+                <img src={iconGithub} alt="깃허브 로고" />
+              </a>
             </IconBtn>
           </div>
         </MainFooterSection>
@@ -97,11 +101,11 @@ const MainFooterSection = styled.section`
   justify-content: center;
   gap: 6px;
   & > * {
-    font-size: 12px;
+    font-size: 16px;
   }
   & > div {
     display: flex;
-    gap: 8px;
+    gap: 16px;
   }
 `
 
