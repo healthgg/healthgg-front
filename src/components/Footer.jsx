@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
 import { userExerciseListState } from 'atoms/exerciseAtom'
 
@@ -20,8 +20,8 @@ const Footer = () => {
   const { pathname, search } = location
 
   const [footer, setFooter] = useState('main')
-  const setUserMealList = useSetRecoilState(userMealListState)
-  const setUserExerciseList = useSetRecoilState(userExerciseListState)
+  const [userMealList, setUserMealList] = useRecoilState(userMealListState)
+  const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
 
   const onClickCalcReset = () => {
     if (pathname === '/meal') {
@@ -40,8 +40,20 @@ const Footer = () => {
   }
 
   const onClickCalcSubmit = () => {
-    if (pathname === '/meal') navigate('/meal/calc')
-    else if (pathname === '/exercise-volume') navigate('/exercise-volume/calc')
+    if (pathname === '/meal') {
+      const hasAllValues = Object.values(userMealList).every((items) => items.length > 0)
+      if (!hasAllValues) {
+        alert('아침, 점심, 저녁 식단을 각각 1개 이상 선택해주세요.')
+        return
+      }
+      navigate('/meal/calc')
+    } else if (pathname === '/exercise-volume') {
+      if (!userExerciseList.length) {
+        alert('운동을 1개 이상 선택해주세요.')
+        return
+      }
+      navigate('/exercise-volume/calc')
+    }
   }
 
   useEffect(() => {

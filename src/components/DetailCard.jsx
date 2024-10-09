@@ -8,6 +8,7 @@ import Image from './Image'
 
 const DetailCard = ({ type, list }) => {
   const nurientNamesArr = [
+    { ko: '영양소', en: 'food_name' },
     { ko: '칼로리', en: 'calory' },
     { ko: '단백질', en: 'protein' },
     { ko: '탄수화물', en: 'carbohydrate' },
@@ -38,7 +39,13 @@ const DetailCard = ({ type, list }) => {
               <p key={uuidv4()}>
                 <span>{name.ko}</span>
                 <br />
-                <span>{isTypeFood ? data?.nutrient?.[name.en] : data?.[name.en]}</span>
+                <span>
+                  {isTypeFood
+                    ? name.en === 'food_name'
+                      ? data?.food_name
+                      : data?.nutrient?.[name.en]
+                    : data?.[name.en]}
+                </span>
               </p>
             ))}
           </div>
