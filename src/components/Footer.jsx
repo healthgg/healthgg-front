@@ -1,19 +1,42 @@
 import { useState, useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { userMealListState } from 'atoms/mealAtom'
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 
 import { MdOutlineEmail } from 'react-icons/md'
 import { iconGithub, iconKakao } from 'assets/icon'
 
+import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
+
 import Button from './Button'
 
 const Footer = () => {
+  const navigate = useNavigate()
   const location = useLocation()
   const { pathname, search } = location
 
   const [footer, setFooter] = useState('main')
+  const setUserMealList = useSetRecoilState(userMealListState)
+
+  const onClickCalcReset = () => {
+    if (pathname === '/meal') {
+      const isConfirm = window.confirm('선택한 식단을 초기화하시겠습니까?')
+      if (isConfirm) {
+        setUserMealList({
+          [BREAKFAST]: [],
+          [LUNCH]: [],
+          [DINNER]: [],
+        })
+      }
+    }
+  }
+
+  const onClickCalcSubmit = () => {
+    if (pathname === '/meal') navigate('/meal/calc')
+  }
 
   useEffect(() => {
     if (['/meal', '/exercise-volume'].includes(pathname)) {
@@ -54,10 +77,10 @@ const Footer = () => {
 
       {footer === 'calc' && (
         <section>
-          <Button size="medium" width="footerHalf" height="footer">
+          <Button size="medium" width="footerHalf" height="footer" onClick={() => onClickCalcReset()}>
             초기화
           </Button>
-          <Button size="medium" width="footerHalf" height="footer" color="mainBlue">
+          <Button size="medium" width="footerHalf" height="footer" color="mainBlue" onClick={() => onClickCalcSubmit()}>
             계산하기
           </Button>
         </section>
