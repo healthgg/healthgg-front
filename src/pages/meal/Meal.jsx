@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 
 import { v4 as uuidv4 } from 'uuid'
 
+import { useQuery } from '@tanstack/react-query'
+import { getNutrientList } from 'api/meal'
+
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
-import { PageTitle, Image } from 'components'
+import { PageTitle, Image, ContentCard } from 'components'
 
-import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
+import { FOOD_IMG_ARR_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const Meal = () => {
   const [curMainTab, setCurMainTab] = useState('전체')
@@ -43,13 +46,29 @@ const Meal = () => {
   })
   const [isChosen, setIsChosen] = useState(false)
   const [keyword, setKeyword] = useState('')
+  const [mealObject, setMealObject] = useState('muscles')
 
   const nutrientList = ['전체', '단백질', '탄수화물', '지방', '비타민']
   const repastList = [BREAKFAST, LUNCH, DINNER]
+  const mealObjectList = [
+    { id: 'muscles', title: '근성장' },
+    { id: 'diet', title: '다이어트' },
+    { id: 'maintain', title: '체중유지' },
+  ]
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({
+    queryKey: ['getNutrientList'],
+    queryFn: () => getNutrientList({ type: 1, take: 20, cursorId: 9999 }),
+    throwOnError: (err) => console.error(err),
+  })
 
   const setCurTab = (tabType, value) => (tabType === 'main' ? setCurMainTab(value) : setCurSubTab(value))
 
-  const onChangeKeyword = (e) => setKeyword(e.target.value)
+  useEffect(() => {
+    if (isSuccess) {
+      console.log('data', data)
+    }
+  }, [isSuccess, data])
 
   useEffect(() => {
     const allSelected = [...userSelectedList[BREAKFAST], ...userSelectedList[LUNCH], ...userSelectedList[DINNER]]
@@ -94,13 +113,36 @@ const Meal = () => {
           ))
         )}
       </SelectedUl>
-      {/* <div>
-        <label htmlFor="radio1">name</label>
-        <input type="radio" id="radio1" name="name" value="value" />
-      </div> */}
-      <div>
-        {/* <input value={onChangeKeyword} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeWord} /> */}
-      </div>
+      <RadioUl>
+        {mealObjectList.map((list) => (
+          <li key={uuidv4()}>
+            <input
+              type="radio"
+              id={list.id}
+              name="mealObject"
+              checked={list.id === mealObject}
+              onChange={() => setMealObject(list.id)}
+            />
+            <label htmlFor={list.id}>{list.title}</label>
+          </li>
+        ))}
+      </RadioUl>
+      <p>{mealObject}</p>
+      {/* <input value={onChangeKeyword} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeWord} /> */}
+      <ItemsDiv>
+        {data &&
+          data.map((list) => (
+            <ContentCard
+              key={uuidv4()}
+              type="food"
+              src={list[FOOD_IMG_ARR_KEY]}
+              title={list?.food_name ?? ''}
+              desc={list?.food_notice ?? ''}
+              boardId={list?.food_id ?? ''}
+              showBtn
+            />
+          ))}
+      </ItemsDiv>
     </>
   )
 }
@@ -180,4 +222,25 @@ const CloseButton = styled.button`
   border-radius: 999px;
   background-color: ${({ theme }) => theme.colors.mainBlue};
   color: ${({ theme }) => theme.colors.bgWhite};
+`
+
+const RadioUl = styled.ul`
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+  & > li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+`
+
+const ItemsDiv = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 28px 16px;
+  & img {
+    width: 100%;
+    height: 136px;
+  }
 `

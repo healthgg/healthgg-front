@@ -9,3 +9,9 @@ export const getMealBest = () => {
 export const getMealDetail = (params) => {
   return getRequest(`/food/board/${params.boardId}`)
 }
+
+// 영양소 목록 조회
+export const getNutrientList = (params) => {
+  const { type, take = '', cursorId = '' } = params
+  return getRequest(`/food/${type}?take=${take}&cursorId=${cursorId}`)
+}

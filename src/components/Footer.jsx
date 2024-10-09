@@ -22,7 +22,7 @@ const Footer = () => {
       setFooter('main')
     } else if (['/meal/calc', '/exercise-volume/calc'].includes(pathname)) {
       setFooter('share')
-    } else if (['/protein-calc', '1rm-calc'].includes(pathname)) {
+    } else if (['/protein-calc', '/1rm-calc'].includes(pathname)) {
       setFooter('calc')
     } else {
       setFooter('main')
