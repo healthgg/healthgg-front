@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
+import { userExerciseListState } from 'atoms/exerciseAtom'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -20,6 +21,7 @@ const Footer = () => {
 
   const [footer, setFooter] = useState('main')
   const setUserMealList = useSetRecoilState(userMealListState)
+  const setUserExerciseList = useSetRecoilState(userExerciseListState)
 
   const onClickCalcReset = () => {
     if (pathname === '/meal') {
@@ -31,11 +33,15 @@ const Footer = () => {
           [DINNER]: [],
         })
       }
+    } else if (pathname === '/exercise-volume') {
+      const isConfirm = window.confirm('선택한 운동을 초기화하시겠습니까?')
+      if (isConfirm) setUserExerciseList([])
     }
   }
 
   const onClickCalcSubmit = () => {
     if (pathname === '/meal') navigate('/meal/calc')
+    else if (pathname === '/exercise-volume') navigate('/exercise-volume/calc')
   }
 
   useEffect(() => {
