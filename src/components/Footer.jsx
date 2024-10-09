@@ -1,19 +1,60 @@
 import { useState, useEffect } from 'react'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { userMealListState } from 'atoms/mealAtom'
+import { userExerciseListState } from 'atoms/exerciseAtom'
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 
 import { MdOutlineEmail } from 'react-icons/md'
 import { iconGithub, iconKakao } from 'assets/icon'
 
+import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
+
 import Button from './Button'
 
 const Footer = () => {
+  const navigate = useNavigate()
   const location = useLocation()
   const { pathname, search } = location
 
   const [footer, setFooter] = useState('main')
+  const [userMealList, setUserMealList] = useRecoilState(userMealListState)
+  const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
+
+  const onClickCalcReset = () => {
+    if (pathname === '/meal') {
+      const isConfirm = window.confirm('선택한 식단을 초기화하시겠습니까?')
+      if (isConfirm) {
+        setUserMealList({
+          [BREAKFAST]: [],
+          [LUNCH]: [],
+          [DINNER]: [],
+        })
+      }
+    } else if (pathname === '/exercise-volume') {
+      const isConfirm = window.confirm('선택한 운동을 초기화하시겠습니까?')
+      if (isConfirm) setUserExerciseList([])
+    }
+  }
+
+  const onClickCalcSubmit = () => {
+    if (pathname === '/meal') {
+      const hasAllValues = Object.values(userMealList).every((items) => items.length > 0)
+      if (!hasAllValues) {
+        alert('아침, 점심, 저녁 식단을 각각 1개 이상 선택해주세요.')
+        return
+      }
+      navigate('/meal/calc')
+    } else if (pathname === '/exercise-volume') {
+      if (!userExerciseList.length) {
+        alert('운동을 1개 이상 선택해주세요.')
+        return
+      }
+      navigate('/exercise-volume/calc')
+    }
+  }
 
   useEffect(() => {
     if (['/meal', '/exercise-volume'].includes(pathname)) {
@@ -22,7 +63,7 @@ const Footer = () => {
       setFooter('main')
     } else if (['/meal/calc', '/exercise-volume/calc'].includes(pathname)) {
       setFooter('share')
-    } else if (['/protein-calc', '1rm-calc'].includes(pathname)) {
+    } else if (['/protein-calc', '/1rm-calc'].includes(pathname)) {
       setFooter('calc')
     } else {
       setFooter('main')
@@ -54,10 +95,10 @@ const Footer = () => {
 
       {footer === 'calc' && (
         <section>
-          <Button size="medium" width="footerHalf" height="footer">
+          <Button size="medium" width="footerHalf" height="footer" onClick={() => onClickCalcReset()}>
             초기화
           </Button>
-          <Button size="medium" width="footerHalf" height="footer" color="mainBlue">
+          <Button size="medium" width="footerHalf" height="footer" color="mainBlue" onClick={() => onClickCalcSubmit()}>
             계산하기
           </Button>
         </section>
