@@ -102,9 +102,10 @@ const MealDataSection = styled.section`
   gap: 20px;
   width: 70%;
   height: fit-content;
-  max-height: 550px;
+  max-height: 600px;
   padding: 20px 30px;
   background: white;
+  border-radius: 5px;
   text-align: center;
   overflow-x: hidden;
   overflow-y: auto;

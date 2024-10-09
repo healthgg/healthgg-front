@@ -216,6 +216,7 @@ const LinedButton = styled.button`
 const SelectedUl = styled.ul`
   display: ${({ $hasItem }) => ($hasItem ? 'grid' : 'flex')};
   grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px 10px;
   padding: 20px 10px;
   min-height: 128px;
   border-radius: 5px;
@@ -229,6 +230,9 @@ const SelectedContDiv = styled.div`
     padding: 0 3px 5px 3px;
     text-align: left;
     font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `
 
