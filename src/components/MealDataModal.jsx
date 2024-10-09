@@ -41,7 +41,7 @@ const MealDataModal = ({ data, onClose, onClick }) => {
         <Image src={data[FOOD_IMG_ARR_KEY]} alt={`${data?.food_name} 이미지`} width="100%" height="150px" />
         {data?.food_notice && <MealDescP>{data?.food_notice}</MealDescP>}
         <WrapInputDiv>
-          <label htmlFor="grams">반복횟수 (10회 이하)</label>
+          <label htmlFor="grams">식단 섭취량</label>
           <input
             id="grams"
             value={grams}
