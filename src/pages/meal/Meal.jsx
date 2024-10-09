@@ -42,28 +42,28 @@ const Meal = () => {
     throwOnError: (err) => console.error(err),
   })
 
-  // set tab
+  // 탭 설정
   const setCurTab = (tabType, value) => (tabType === 'main' ? setCurMainTab(value) : setCurSubTab(value))
 
-  // toggle modal
+  // 모달 출력 여부 토글
   const toggleMealModal = () => {
     setShowMealModal(!showMealModal)
     setGrams('')
   }
 
-  // set clicked meal data
+  // 클릭한 식단 데이터 임시 저장
   const onClickMealData = (obj) => {
     setCurClickedObj(obj)
     toggleMealModal()
   }
 
-  // set meal list
+  // 선택한 식단 리스트 저장/삭제
   const setMealList = (setType, selectedData) => {
     if (setType === 'add') {
       if (userMealList[curSubTab].length > 5) {
         alert('끼니 당 식단은 6개까지만 가능합니다.')
         setGrams('')
-        toggleMealModal(false)
+        setShowMealModal(false)
         return
       }
       if (!grams) {
