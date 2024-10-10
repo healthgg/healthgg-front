@@ -20,6 +20,7 @@ const RadioLabel = styled.label`
   margin-right: 10px; 
   align-items: center;
   font-size: ${({ theme }) => theme.fontSize.medium};
+   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme, checked }) => (checked ? theme?.colors?.mainBlue || '#007bff' : theme?.colors?.typoBlack || '#000')};
 `
 
@@ -28,8 +29,8 @@ const RadioInput = styled.input`
 `
 
 const CustomRadio = styled.span`
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   border: 2px solid ${({ theme }) => theme.colors.borderGray || '#ccc'};
   border-radius: 50%;
   margin-right: 6px;
@@ -42,8 +43,8 @@ const CustomRadio = styled.span`
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 12px;
-      height: 12px;
+      width: 50%;
+      height: 50%;
       background-color: ${({ theme }) => theme.colors.mainBlue || '#007bff'};
       border-radius: 50%;
       transform: translate(-50%, -50%);

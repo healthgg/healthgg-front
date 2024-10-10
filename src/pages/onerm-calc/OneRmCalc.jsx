@@ -113,23 +113,16 @@ const Container = styled.div`
 const OnermTitle = styled.div`
   margin-top: 40px;
   margin-bottom: 40px;
-  font-size: ${({ theme }) => theme.fontSize.title};
+  font-size: ${({ theme }) => theme.fontSize.subTitle};
   font-weight: ${({ theme }) => theme.fontWeight.title};
   color: ${({ theme }) => theme.colors.mainBlue};
 `
 
-/**
- * 라디오 버튼 래핑으로 가로 정렬
- */
+// 라디오 버튼
 const RadioWrapper = styled.div`
   display: flex;
 `
-
-/**
- *
- *테이블
- */
-
+// 테이블
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
