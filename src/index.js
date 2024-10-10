@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { RecoilRoot } from 'recoil'
 
 import { GlobalStyle, theme } from 'style'
 import { ThemeProvider } from 'styled-components'
@@ -20,10 +21,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
   </QueryClientProvider>,
 )
 

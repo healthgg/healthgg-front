@@ -13,12 +13,24 @@ const ContentCard = ({ type, isQuad, urlArrs, src, alt, title, desc, boardId, sh
 
   return (
     <ContentCardWrap>
-      {isQuad ? <QuadImages urlArrs={urlArrs} /> : <Image src={src} alt={alt} />}
-      <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
-        <TitleH2 $showBtn={showBtn}>{title}</TitleH2>
-        {showBtn && <Button color="mainBlue">선택</Button>}
-      </TitleDiv>
-      <p>{desc}</p>
+      {isQuad ? (
+        <>
+          <QuadImages urlArrs={urlArrs} />
+          <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
+            <TitleH2>{title}</TitleH2>
+          </TitleDiv>
+          <p>{desc}</p>
+        </>
+      ) : (
+        <>
+          <Image src={src} alt={alt} />
+          <TitleDiv>
+            <TitleH2 $showBtn={showBtn}>{title}</TitleH2>
+            {showBtn && <Button color="mainBlue">선택</Button>}
+          </TitleDiv>
+          <p>{desc}</p>
+        </>
+      )}
     </ContentCardWrap>
   )
 }
@@ -50,7 +62,7 @@ const TitleH2 = styled.h2`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
+  cursor: ${({ $showBtn }) => ($showBtn ? 'default' : 'pointer')};
   & + button {
     display: flex;
     align-items: center;
