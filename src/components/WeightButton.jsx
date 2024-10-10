@@ -24,7 +24,7 @@ const ButtonRow = styled.div`
 `
 
 const Button = styled.button`
-  padding: 0.3em 0.8em;
+  padding: 0.4em 0.8em;
   background-color: ${({ theme }) => theme.colors.mainBlue};
   color: white;
   font-size: ${({ theme, size }) => theme.fontSize[size]};

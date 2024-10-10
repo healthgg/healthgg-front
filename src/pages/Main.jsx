@@ -14,6 +14,7 @@ import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_ARR_KEY } from 'constants/responseKeys'
 
 import { SectionTitle, ContentCard } from 'components'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
+import spinner from '../assets/icon/spinner.webp'
 
 const Main = () => {
   const navigate = useNavigate()
@@ -70,7 +71,11 @@ const Main = () => {
 
   // todo 로딩 스피너 또는 스켈레톤 UI
   return isLoading ? (
-    <p>로딩중</p>
+    // 임시 로딩 스피너
+    <SpinnerContainer>
+      <SpinnerImage src={spinner} alt="Loading..." />
+      <p>Loading...</p>
+    </SpinnerContainer>
   ) : (
     data && (
       <MainWrap>
@@ -191,4 +196,17 @@ const BestSlideDiv = styled.div`
   & > div {
     flex: 1;
   }
+`
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`
+
+const SpinnerImage = styled.img`
+  width: 50px;
+  height: 50px;
 `
