@@ -11,6 +11,9 @@ import Portal from './Portal'
 import QuadImages from './QuadImages'
 import SectionTitle from './SectionTitle'
 import Sidebar from './Sidebar'
+import InputBox from './InputBox'
+import RadioButton from './RadioButton'
+import WeightButton from './WeightButton'
 
 export {
   BoardList,
@@ -26,4 +29,7 @@ export {
   QuadImages,
   SectionTitle,
   Sidebar,
+  InputBox,
+  RadioButton,
+  WeightButton,
 }

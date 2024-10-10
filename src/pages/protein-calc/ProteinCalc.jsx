@@ -9,7 +9,6 @@ const ProteinCalc = () => {
 
   const calculateProteinIntake = () => {
     let intakeFactor
-
     // Define protein intake factor based on the selected goal
     if (selectedGoal === 'muscle_gain') {
       intakeFactor = gender === 'male' ? 2.0 : 1.8
