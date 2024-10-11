@@ -4,8 +4,8 @@ import InputBox from 'components/InputBox'
 import { PageTitle } from 'components'
 import RadioButton from 'components/RadioButton'
 import WeightButton from 'components/WeightButton'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/exerciseAtom'
+import { useRecoilState } from 'recoil'
+import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/onermAtom'
 
 const OnermCalc = () => {
   const [weight, setWeight] = useRecoilState(onermWeightState)
@@ -55,6 +55,11 @@ const OnermCalc = () => {
     }
     if (numeberValue > 1000) {
       alert('당신은 로니콜먼이 아닙니다')
+      return
+    }
+
+    if (Number.isNaN(numeberValue)) {
+      alert('숫자만 입력가능 합니다')
       return
     }
     setWeight(value)
