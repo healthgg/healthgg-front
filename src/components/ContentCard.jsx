@@ -40,7 +40,6 @@ export default ContentCard
 const ContentCardWrap = styled.div`
   overflow: hidden;
   & > p {
-    margin-top: 8px;
     width: 100%;
     font-size: 16px;
     white-space: nowrap;

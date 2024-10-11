@@ -26,6 +26,7 @@ const WrapSectionTitle = styled.div`
     font-weight: ${({ theme }) => theme.fontWeight.subTitle};
   }
   & > button {
-    font-size: 10px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
   }
 `
