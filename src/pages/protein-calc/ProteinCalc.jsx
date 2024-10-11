@@ -4,27 +4,31 @@ import { PageTitle } from 'components'
 import WeightButton from 'components/WeightButton'
 import RadioButton from 'components/RadioButton'
 import InputBox from 'components/InputBox'
+import { useRecoilState } from 'recoil'
+import { proteinPurpose, proteinGender, proteinWeight, proteinResult } from 'atoms/proteinAtom'
 
 const ProteinCalc = () => {
-  const [weight, setWeight] = useState('')
-  const [proteinIntake, setProteinIntake] = useState(0)
-  const [selectedGoal, setSelectedGoal] = useState('muscle_gain')
-  const [gender, setGender] = useState('male')
+  const [selectedGoal, setSelectedGoal] = useRecoilState(proteinPurpose)
+  const [gender, setGender] = useRecoilState(proteinGender)
+  const [weight, setWeight] = useRecoilState(proteinWeight)
+  const [proteinIntake, setProteinIntake] = useRecoilState(proteinResult)
 
-  const calculateProteinIntake = () => {
-    let intakeFactor
-    if (selectedGoal === 'muscle_gain') {
-      intakeFactor = gender === 'male' ? 2.0 : 1.8
-    } else if (selectedGoal === 'diet') {
-      intakeFactor = gender === 'male' ? 1.5 : 1.3
-    } else if (selectedGoal === 'weight_maintenance') {
-      intakeFactor = gender === 'male' ? 1.2 : 1.0
+  const handleWeightChange = (e) => {
+    const { value } = e.target
+    const numeberValue = +value
+
+    if (value === '') {
+      setWeight('')
+      return
     }
 
-    const result = weight ? (parseFloat(weight) * intakeFactor).toFixed(2) : 0
-    setProteinIntake(result)
-  }
+    if (Number.isNaN(numeberValue)) {
+      alert('숫자만 입력가능 합니다')
+      return
+    }
 
+    setWeight(value)
+  }
   return (
     <Container>
       <PageTitle size="h2">
@@ -87,13 +91,7 @@ const ProteinCalc = () => {
         />
       </RadioWrapper>
 
-      <InputBox
-        type="number"
-        id="weight"
-        value={weight}
-        onChange={(e) => setWeight(e.target.value)}
-        placeholder="몸무게"
-      />
+      <InputBox type="number" id="weight" value={weight} onChange={handleWeightChange} placeholder="몸무게" />
 
       <WeightButton setWeight={setWeight} />
     </Container>

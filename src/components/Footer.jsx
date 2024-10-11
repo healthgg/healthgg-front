@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
-import {
-  userExerciseListState,
-  onermExerciseState,
-  onermWeightState,
-  onermRepsState,
-  onermValueState,
-} from 'atoms/exerciseAtom'
+import { userExerciseListState } from 'atoms/exerciseAtom'
+
+import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/onermAtom'
+import { proteinPurpose, proteinGender, proteinWeight, proteinResult } from 'atoms/proteinAtom'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -32,7 +29,12 @@ const Footer = () => {
   const [onermWeight, setOnermWeight] = useRecoilState(onermWeightState)
   const [onermReps, setOnermReps] = useRecoilState(onermRepsState)
   const [onermValue, setOnermValue] = useRecoilState(onermValueState)
-  const [onermExercise] = useRecoilState(onermExerciseState)
+  const [onermExercise, setOnermExercise] = useRecoilState(onermExerciseState)
+
+  const [selectedGoal, setSelectedGoal] = useRecoilState(proteinPurpose)
+  const [gender, setGender] = useRecoilState(proteinGender)
+  const [weight, setWeight] = useRecoilState(proteinWeight)
+  const [proteinIntake, setProteinIntake] = useRecoilState(proteinResult)
 
   const onClickCalcReset = () => {
     if (pathname === '/meal') {
@@ -48,10 +50,14 @@ const Footer = () => {
       const isConfirm = window.confirm('선택한 운동을 초기화하시겠습니까?')
       if (isConfirm) setUserExerciseList([])
     } else if (pathname === '/protein-calc') {
-      console.log(1)
+      // protenin 초기화
+      setSelectedGoal('muscle_gain')
+      setGender('male')
+      setWeight('')
     } else if (pathname === '/1rm-calc') {
       // 1rm계산 값 초기화
       setOnermValue({ deadlift: 0, squat: 0, benchpress: 0 })
+      setOnermExercise('deadlift')
       setOnermWeight('')
       setOnermReps('')
     }
@@ -72,7 +78,24 @@ const Footer = () => {
       }
       navigate('/exercise-volume/calc')
     } else if (pathname === '/protein-calc') {
+      const purposeArr = ['muscle_gain', 'diet', 'weight_maintenance']
       // 프로틴 계산 로직 추가
+      if (weight === '' || Number(weight) === 0) {
+        alert('몸무게를 입력하세요')
+        return
+      }
+
+      let intakeFactor
+      if (selectedGoal === purposeArr[0]) {
+        intakeFactor = gender === 'male' ? 2.0 : 1.8
+      } else if (selectedGoal === purposeArr[1]) {
+        intakeFactor = gender === 'male' ? 1.5 : 1.3
+      } else if (selectedGoal === purposeArr[2]) {
+        intakeFactor = gender === 'male' ? 1.2 : 1.0
+      }
+
+      const result = weight ? (parseFloat(weight) * intakeFactor).toFixed(2) : 0
+      setProteinIntake(Number(result).toFixed(0))
     } else if (pathname === '/1rm-calc') {
       // 1rm 계산 로직 추가
       // 중량 * (1 + 0.033 * 횟수)
