@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
-import { userExerciseListState } from 'atoms/exerciseAtom'
+import {
+  userExerciseListState,
+  onermExerciseState,
+  onermWeightState,
+  onermRepsState,
+  onermValueState,
+} from 'atoms/exerciseAtom'
 
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -23,6 +29,11 @@ const Footer = () => {
   const [userMealList, setUserMealList] = useRecoilState(userMealListState)
   const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
 
+  const [onermWeight, setOnermWeight] = useRecoilState(onermWeightState)
+  const [onermReps, setOnermReps] = useRecoilState(onermRepsState)
+  const [onermValue, setOnermValue] = useRecoilState(onermValueState)
+  const [onermExercise] = useRecoilState(onermExerciseState)
+
   const onClickCalcReset = () => {
     if (pathname === '/meal') {
       const isConfirm = window.confirm('선택한 식단을 초기화하시겠습니까?')
@@ -36,6 +47,13 @@ const Footer = () => {
     } else if (pathname === '/exercise-volume') {
       const isConfirm = window.confirm('선택한 운동을 초기화하시겠습니까?')
       if (isConfirm) setUserExerciseList([])
+    } else if (pathname === '/protein-calc') {
+      console.log(1)
+    } else if (pathname === '/1rm-calc') {
+      // 1rm계산 값 초기화
+      setOnermValue({ deadlift: 0, squat: 0, benchpress: 0 })
+      setOnermWeight('')
+      setOnermReps('')
     }
   }
 
@@ -53,6 +71,20 @@ const Footer = () => {
         return
       }
       navigate('/exercise-volume/calc')
+    } else if (pathname === '/protein-calc') {
+      // 프로틴 계산 로직 추가
+    } else if (pathname === '/1rm-calc') {
+      // 1rm 계산 로직 추가
+      // 중량 * (1 + 0.033 * 횟수)
+      const onerm = onermWeight * (1 + 0.033 * onermReps)
+      // 2. 계산 값 전역으로 넘기기
+      setOnermValue((prev) => {
+        return {
+          ...prev,
+          // 소수점 제거
+          [onermExercise]: onerm.toFixed(0),
+        }
+      })
     }
   }
 

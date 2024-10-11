@@ -4,12 +4,14 @@ import InputBox from 'components/InputBox'
 import { PageTitle } from 'components'
 import RadioButton from 'components/RadioButton'
 import WeightButton from 'components/WeightButton'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/exerciseAtom'
 
 const OnermCalc = () => {
-  const [weight, setWeight] = useState('')
-  const [reps, setReps] = useState('')
-  const [oneRm, setOneRm] = useState({ deadlift: 0, squat: 0, benchpress: 0 })
-  const [selectedExercise, setSelectedExercise] = useState('deadlift')
+  const [weight, setWeight] = useRecoilState(onermWeightState)
+  const [reps, setReps] = useRecoilState(onermRepsState)
+  const [oneRm, setOneRm] = useRecoilState(onermValueState)
+  const [selectedExercise, setSelectedExercise] = useRecoilState(onermExerciseState)
 
   const exercises = [
     { name: '데드리프트', value: oneRm.deadlift },
@@ -17,26 +19,45 @@ const OnermCalc = () => {
     { name: '벤치프레스', value: oneRm.benchpress },
   ]
 
-  const calculateOneRm = () => {
-    if (weight && reps) {
-      const result = (parseFloat(weight) * (1 + parseFloat(reps) / 30)).toFixed(2)
-      setOneRm({
-        ...oneRm,
-        [selectedExercise]: result,
-      })
+  const totalOneRM = Object.values(oneRm).reduce((a, c) => Number(a) + Number(c), 0)
+  // 반복 횟수 처리
+  const handleRepsChange = (e) => {
+    const { value } = e.target
+    const numeberValue = +value
+
+    if (Number.isNaN(numeberValue)) {
+      alert('숫자만 입력가능 합니다')
+      return
+    }
+
+    if (value === '') {
+      // 백스페이스
+      setReps('')
+      return
+    }
+
+    if (numeberValue > 10) {
+      alert('횟수는 10이하여야 합니다')
+      return
+    }
+
+    if (numeberValue <= 10) {
+      setReps(value)
     }
   }
 
-  // 값이 세자리일부터 값을 에러를 반환함 수정 필요
-  const handleRepsChange = (e) => {
-    setReps(e.target.value)
-    const numReps = +reps
-    console.log(numReps)
-    // 숫자 변환 후 11 이상인지 확인
-    if (numReps > 10) {
-      setReps('')
-      window.alert('10회 이하여야함')
+  const handleWeightChange = (e) => {
+    const { value } = e.target
+    const numeberValue = +value
+
+    if (value === '') {
+      setWeight('')
     }
+    if (numeberValue > 1000) {
+      alert('당신은 로니콜먼이 아닙니다')
+      return
+    }
+    setWeight(value)
   }
 
   return (
@@ -45,7 +66,7 @@ const OnermCalc = () => {
         반복 횟수와 무게를 기반으로 수행 가능한 <br /> 1RM을 계산합니다
       </PageTitle>
 
-      <OnermTitle>{`수행가능 1RM: ${oneRm[selectedExercise]}kg`}</OnermTitle>
+      <OnermTitle> {`3대운동 합계: ${totalOneRM}kg`}</OnermTitle>
 
       <RadioWrapper>
         <RadioButton
@@ -57,14 +78,6 @@ const OnermCalc = () => {
           label="데드리프트"
         />
         <RadioButton
-          id="benchpress"
-          name="exercise"
-          value="benchpress"
-          checked={selectedExercise === 'benchpress'}
-          onChange={() => setSelectedExercise('benchpress')}
-          label="벤치프레스"
-        />
-        <RadioButton
           id="squat"
           name="exercise"
           value="squat"
@@ -72,20 +85,18 @@ const OnermCalc = () => {
           onChange={() => setSelectedExercise('squat')}
           label="스쿼트"
         />
+        <RadioButton
+          id="benchpress"
+          name="exercise"
+          value="benchpress"
+          checked={selectedExercise === 'benchpress'}
+          onChange={() => setSelectedExercise('benchpress')}
+          label="벤치프레스"
+        />
       </RadioWrapper>
-
       <InputBox type="number" id="reps" value={reps} onChange={handleRepsChange} placeholder="반복횟수 (10회 이하)" />
-
-      <InputBox
-        type="number"
-        id="weight"
-        value={weight}
-        onChange={(e) => setWeight(e.target.value)}
-        placeholder="무게"
-      />
-
+      <InputBox type="number" id="weight" value={weight} onChange={handleWeightChange} placeholder="무게" />
       <WeightButton setWeight={setWeight} />
-
       <Table>
         <thead>
           <TableRow>
@@ -145,6 +156,20 @@ const TableRow = styled.tr`
 const TableCell = styled.td`
   padding: 16px;
   width: 50%;
+`
+
+const CalculateButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: ${({ theme }) => theme.colors.mainBlue};
+  color: white;
+  border: none;
+  font-size: ${({ theme }) => theme.fontSize.medium};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.darkBlue};
+  }
 `
 
 export default OnermCalc
