@@ -54,6 +54,7 @@ const Footer = () => {
       setSelectedGoal('muscle_gain')
       setGender('male')
       setWeight('')
+      setProteinIntake(0)
     } else if (pathname === '/1rm-calc') {
       // 1rm계산 값 초기화
       setOnermValue({ deadlift: 0, squat: 0, benchpress: 0 })
