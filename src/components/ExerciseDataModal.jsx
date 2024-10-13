@@ -44,7 +44,7 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
 
   useEffect(() => {
     const { reps, weight, sets } = grams
-    setEachTotWeight(+reps + +weight + +sets)
+    setEachTotWeight(+reps * +weight * +sets)
   }, [grams])
 
   return (
@@ -104,19 +104,21 @@ const MealDataSection = styled.section`
   gap: 20px;
   width: 70%;
   height: fit-content;
-  max-height: 600px;
-  padding: 20px 30px;
+  max-height: 720px;
+  padding: 50px 30px;
   background: white;
   border-radius: 5px;
   text-align: center;
   overflow-x: hidden;
   overflow-y: auto;
   & > p:first-child {
-    font-size: ${({ theme }) => theme.fontSize.subTitle};
-    font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+    font-size: ${({ theme }) => theme.fontSize.medium};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
   }
   & > img {
     object-fit: contain;
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
   }
   &::-webkit-scrollbar {
     width: 2px;
@@ -128,32 +130,33 @@ const MealDataSection = styled.section`
 
 const ExerciseDescP = styled.p`
   margin-top: -10px;
-  font-size: 12px;
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  font-size: ${({ theme }) => theme.fontSize.regular};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
   text-align: justify;
 `
 
 const WrapInputDiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   & > div {
     position: relative;
     & > label {
       display: inline-block;
       margin-bottom: 3px;
       width: 100%;
-      font-size: 12px;
+      font-size: ${({ theme }) => theme.fontSize.regular};
+      font-weight: ${({ theme }) => theme.fontWeight.medium};
       text-align: left;
     }
     & > input {
-      padding: 10px;
+      padding: 12px 10px;
       width: 100%;
       border-radius: 5px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
     }
     & > input:focus {
-      outline: none;
+      outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
     }
   }
 `
@@ -169,8 +172,10 @@ const StyledClose = styled(IoCloseOutline)`
 `
 
 const TotalWeightP = styled.p`
+  margin-top: 12px;
   font-size: ${({ theme }) => theme.fontSize.medium};
-  font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.mainBlue};
 `
 
 const WrapCtaDiv = styled.div`
@@ -178,7 +183,8 @@ const WrapCtaDiv = styled.div`
   justify-content: center;
   gap: 15px;
   & > button {
-    padding: 5px 8px;
-    font-size: 14px;
+    padding: 6px 16px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
   }
 `

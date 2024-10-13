@@ -24,8 +24,8 @@ const Main = () => {
 
   const lnbList = [
     { name: '프로틴 섭취량\n계산기', path: '/protein-calc', src: iconProtein, alt: '프로틴' },
-    { name: '운동볼륨\n계산기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
     { name: '1RM\n계산기', path: '/1rm-calc', src: iconCalc, alt: '계산기' },
+    { name: '커스텀 운동볼륨\n만들기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
     { name: '커스텀\n식단 만들기', path: '/meal', src: iconMeal, alt: '접시' },
   ]
 
