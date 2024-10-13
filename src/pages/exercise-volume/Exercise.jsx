@@ -9,7 +9,7 @@ import { getExerciseList } from 'api/exercise'
 
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
-import { PageTitle, Image, Button, Portal } from 'components'
+import { PageTitle, Image, Button, Portal, Loading } from 'components'
 
 import { EXERCISE_IMG_KEY } from 'constants/responseKeys'
 
@@ -91,7 +91,9 @@ const Exercise = () => {
     setShowExerciseModal(false)
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <FilledTabUl>
         {nutrientList.map(({ tabId, tabName }) => (

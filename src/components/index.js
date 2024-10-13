@@ -5,6 +5,7 @@ import DetailCard from './DetailCard'
 import Footer from './Footer'
 import Image from './Image'
 import Layout from './Layout'
+import Loading from './Loading'
 import Navbar from './Navbar'
 import PageTitle from './PageTitle'
 import Portal from './Portal'
@@ -23,6 +24,7 @@ export {
   Footer,
   Image,
   Layout,
+  Loading,
   Navbar,
   PageTitle,
   Portal,

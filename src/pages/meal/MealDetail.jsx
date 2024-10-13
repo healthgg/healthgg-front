@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getMealDetail } from 'api/meal'
 
-import { PageTitle, DetailCard } from 'components'
+import { PageTitle, DetailCard, Loading } from 'components'
 
 const MealDetail = () => {
   const { boardId = '' } = useParams()
@@ -31,7 +31,7 @@ const MealDetail = () => {
 
   return (
     <>
-      {isLoading && <p>로딩중</p>}
+      {isLoading && <Loading />}
       {isSuccess && data && (
         <>
           <PageTitle>{boardTitle}</PageTitle>

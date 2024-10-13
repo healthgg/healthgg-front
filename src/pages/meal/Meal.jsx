@@ -9,7 +9,7 @@ import { getNutrientList } from 'api/meal'
 
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
-import { PageTitle, Image, Button, Portal } from 'components'
+import { PageTitle, Image, Button, Portal, Loading } from 'components'
 
 import { FOOD_IMG_ARR_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
@@ -89,7 +89,9 @@ const Meal = () => {
     setShowMealModal(false)
   }
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <FilledTabUl>
         {nutrientList.map(({ tabId, tabName }) => (

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getMealBest } from 'api/meal'
 
-import { PageTitle, BoardList } from 'components'
+import { PageTitle, BoardList, Loading } from 'components'
 
 const MealList = () => {
   // todo: 에러페이지 제작 후 isError || error일 때 해당 페이지로 랜딩
@@ -16,7 +16,7 @@ const MealList = () => {
   return (
     <>
       <PageTitle>🍜 BEST 식단</PageTitle>
-      {isLoading && <p>로딩중</p>}
+      {isLoading && <Loading />}
       {isSuccess && data && <BoardList type="food" path="/meal" list={data} />}
     </>
   )
