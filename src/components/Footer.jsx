@@ -16,6 +16,7 @@ import { iconGithub, iconKakao } from 'assets/icon'
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 import Button from './Button'
+import Portal from './Portal'
 
 const Footer = () => {
   const navigate = useNavigate()
@@ -35,6 +36,10 @@ const Footer = () => {
   const [gender, setGender] = useRecoilState(proteinGender)
   const [weight, setWeight] = useRecoilState(proteinWeight)
   const [proteinIntake, setProteinIntake] = useRecoilState(proteinResult)
+
+  const [showShareCalcModal, setShowShareCalcModal] = useState(false)
+
+  const toggleShareCalcModal = () => setShowShareCalcModal(!showShareCalcModal)
 
   const onClickCalcReset = () => {
     if (pathname === '/meal') {
@@ -112,6 +117,25 @@ const Footer = () => {
     }
   }
 
+  const onClickCalcShare = () => {
+    if (pathname === '/meal/calc') {
+      const hasAllValues = Object.values(userMealList).every((items) => items.length > 0)
+      if (!hasAllValues) {
+        alert('공유할 식단이 없습니다. 이전 페이지로 이동합니다.')
+        navigate('/meal')
+        return
+      }
+      toggleShareCalcModal()
+    } else if (pathname === '/exercise-volume/calc') {
+      if (!userExerciseList.length) {
+        alert('공유할 운동이 없습니다. 이전 페이지로 이동합니다.')
+        navigate('/exercise-volume')
+        return
+      }
+      toggleShareCalcModal()
+    }
+  }
+
   useEffect(() => {
     if (['/meal', '/exercise-volume'].includes(pathname)) {
       setFooter(search ? 'main' : 'calc')
@@ -127,47 +151,62 @@ const Footer = () => {
   }, [pathname])
 
   return (
-    <WrapFooter>
-      {footer === 'main' && (
-        <MainFooterSection>
-          <p>운동 기구 및 영양소 추가 문의</p>
-          <div>
-            <a href="mailto:ystar5008@naver.com">
-              <StyledEmail />
-            </a>
-            <IconBtn type="button">
-              <a href="https://open.kakao.com/o/gaFKNPQg" target="_blank" rel="noopener noreferrer">
-                <img src={iconKakao} alt="카카오톡 로고" />
+    <>
+      <WrapFooter>
+        {footer === 'main' && (
+          <MainFooterSection>
+            <p>운동 기구 및 영양소 추가 문의</p>
+            <div>
+              <a href="mailto:ystar5008@naver.com">
+                <StyledEmail />
               </a>
-            </IconBtn>
-            <IconBtn type="button">
-              <a href="https://github.com/healthgg" target="_blank" rel="noopener noreferrer">
-                <img src={iconGithub} alt="깃허브 로고" />
-              </a>
-            </IconBtn>
-          </div>
-        </MainFooterSection>
-      )}
+              <IconBtn type="button">
+                <a href="https://open.kakao.com/o/gaFKNPQg" target="_blank" rel="noopener noreferrer">
+                  <img src={iconKakao} alt="카카오톡 로고" />
+                </a>
+              </IconBtn>
+              <IconBtn type="button">
+                <a href="https://github.com/healthgg" target="_blank" rel="noopener noreferrer">
+                  <img src={iconGithub} alt="깃허브 로고" />
+                </a>
+              </IconBtn>
+            </div>
+          </MainFooterSection>
+        )}
 
-      {footer === 'calc' && (
-        <section>
-          <Button size="medium" width="footerHalf" height="footer" onClick={() => onClickCalcReset()}>
-            초기화
-          </Button>
-          <Button size="medium" width="footerHalf" height="footer" color="mainBlue" onClick={() => onClickCalcSubmit()}>
-            계산하기
-          </Button>
-        </section>
-      )}
+        {footer === 'calc' && (
+          <section>
+            <Button size="medium" width="footerHalf" height="footer" onClick={() => onClickCalcReset()}>
+              초기화
+            </Button>
+            <Button
+              size="medium"
+              width="footerHalf"
+              height="footer"
+              color="mainBlue"
+              onClick={() => onClickCalcSubmit()}
+            >
+              계산하기
+            </Button>
+          </section>
+        )}
 
-      {footer === 'share' && (
-        <section>
-          <Button size="medium" width="footerFull" height="footer" color="mainBlue">
-            공유하기
-          </Button>
-        </section>
-      )}
-    </WrapFooter>
+        {footer === 'share' && (
+          <section>
+            <Button
+              size="medium"
+              width="footerFull"
+              height="footer"
+              color="mainBlue"
+              onClick={() => onClickCalcShare()}
+            >
+              공유하기
+            </Button>
+          </section>
+        )}
+      </WrapFooter>
+      {showShareCalcModal && <Portal portalType="shareCalcModal" onClose={() => setShowShareCalcModal(false)} />}
+    </>
   )
 }
 

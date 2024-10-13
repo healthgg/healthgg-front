@@ -66,6 +66,7 @@ const CardUl = styled.ul`
 
 const CardLi = styled.li`
   display: flex;
+  align-items: center;
   gap: 40px;
   & > div {
     display: flex;

@@ -161,7 +161,7 @@ const Meal = () => {
       </ItemsDiv>
       {showMealModal && (
         <Portal
-          type="mealModal"
+          portalType="mealModal"
           data={curClickedObj}
           onClose={toggleMealModal}
           onClick={() => setMealList('add', curClickedObj)}

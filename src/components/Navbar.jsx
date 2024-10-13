@@ -24,7 +24,7 @@ const Navbar = () => {
       <button type="button" onClick={toggleSidebar}>
         <StyledHamburger />
       </button>
-      {showSidebar && <Portal type="sidebar" onClose={toggleSidebar} />}
+      {showSidebar && <Portal portalType="sidebar" onClose={toggleSidebar} />}
     </WrapNav>
   )
 }

@@ -144,7 +144,7 @@ const Exercise = () => {
       </ItemsDiv>
       {showExerciseModal && (
         <Portal
-          type="exerciseModal"
+          portalType="exerciseModal"
           data={curClickedObj}
           onClose={toggleExerciseModal}
           onClick={() => setExerciseList('add', curClickedObj)}

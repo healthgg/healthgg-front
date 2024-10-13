@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
 
@@ -14,10 +14,6 @@ const MealCalc = () => {
   const userMealList = useRecoilValue(userMealListState)
 
   const repastList = [BREAKFAST, LUNCH, DINNER]
-
-  useEffect(() => {
-    console.log(userMealList)
-  }, [userMealList])
 
   return (
     <>
@@ -130,11 +126,11 @@ const WrapCardsDiv = styled.div`
     grid-column-gap: 10px;
     grid-row-gap: 15px;
     margin-top: 20px;
+    width: 100%;
     & > li {
       display: flex;
-      align-items: center;
       padding: 10px;
-      gap: 10px;
+      gap: 8px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
       border: 1px solid #cacaca;
       border-radius: 5px;
