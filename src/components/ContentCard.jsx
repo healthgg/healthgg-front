@@ -51,7 +51,6 @@ const ContentCardWrap = styled.div`
 const TitleDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
 `
 
 const TitleH2 = styled.h2`
@@ -65,8 +64,8 @@ const TitleH2 = styled.h2`
   & + button {
     display: flex;
     align-items: center;
-    padding: 0 4px;
-    height: 18px;
-    font-size: 11px;
+    padding: 6px 8px;
+    height: 100%;
+    font-size: 13px;
   }
 `

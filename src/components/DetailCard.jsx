@@ -75,11 +75,13 @@ const CardLi = styled.li`
     flex-direction: column;
     gap: 10px;
     p > span:first-child {
-      font-size: 16px;
-      font-weight: ${({ theme }) => theme.fontWeight.title};
+      font-size: ${({ theme }) => theme.fontSize.regular};
+      font-weight: ${({ theme }) => theme.fontWeight.medium};
     }
     p > span:last-child {
-      font-size: 14px;
+      font-size: ${({ theme }) => theme.fontSize.medium};
+      font-weight: ${({ theme }) => theme.fontWeight.medium};
+      color: ${({ theme }) => theme.colors.mainBlue};
     }
   }
 `
