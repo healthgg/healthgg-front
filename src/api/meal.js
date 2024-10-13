@@ -1,4 +1,4 @@
-import { getRequest } from './instance'
+import { getRequest, postRequest } from './instance'
 
 // BEST 식단 조회
 export const getMealBest = () => {
@@ -8,4 +8,15 @@ export const getMealBest = () => {
 // 식단 상세 조회
 export const getMealDetail = (params) => {
   return getRequest(`/food/board/${params.boardId}`)
+}
+
+// 영양소 목록 조회
+export const getNutrientList = (params) => {
+  const { type, take = '', cursorId = '' } = params
+  return getRequest(`/food/${type}?take=${take}&cursorId=${cursorId}`)
+}
+
+// 식단 공유하기
+export const postMealShare = (data) => {
+  return postRequest(`/food/share`, data)
 }

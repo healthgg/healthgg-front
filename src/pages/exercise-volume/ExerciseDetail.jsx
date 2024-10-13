@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getExerciseDetail } from 'api/exercise'
 
-import { PageTitle, DetailCard } from 'components'
+import { PageTitle, DetailCard, Loading } from 'components'
 
 const ExerciseDetail = () => {
   const { boardId = '' } = useParams()
@@ -31,7 +31,7 @@ const ExerciseDetail = () => {
 
   return (
     <>
-      {isLoading && <p>로딩중</p>}
+      {isLoading && <Loading />}
       {isSuccess && data && (
         <>
           <PageTitle>{boardTitle}</PageTitle>

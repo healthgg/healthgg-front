@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getExerciseBest } from 'api/exercise'
 
-import { PageTitle, BoardList } from 'components'
+import { PageTitle, BoardList, Loading } from 'components'
 
 const ExerciseList = () => {
   // todo: 에러페이지 제작 후 isError || error일 때 해당 페이지로 랜딩
@@ -16,7 +16,7 @@ const ExerciseList = () => {
   return (
     <>
       <PageTitle>🍜 BEST 운동볼륨</PageTitle>
-      {isLoading && <p>로딩중</p>}
+      {isLoading && <Loading />}
       {isSuccess && data && <BoardList type="exercise_volume" path="/exercise-volume" list={data} />}
     </>
   )

@@ -12,7 +12,7 @@ import { getMain } from 'api/main'
 
 import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_ARR_KEY } from 'constants/responseKeys'
 
-import { SectionTitle, ContentCard } from 'components'
+import { Loading, SectionTitle, ContentCard } from 'components'
 import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
 
 const Main = () => {
@@ -70,7 +70,7 @@ const Main = () => {
 
   // todo 로딩 스피너 또는 스켈레톤 UI
   return isLoading ? (
-    <p>로딩중</p>
+    <Loading />
   ) : (
     data && (
       <MainWrap>
