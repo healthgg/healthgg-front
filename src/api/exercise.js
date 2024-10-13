@@ -1,4 +1,4 @@
-import { getRequest } from './instance'
+import { getRequest, postRequest } from './instance'
 
 // BEST 운동볼륨 조회
 export const getExerciseBest = () => {
@@ -14,4 +14,9 @@ export const getExerciseDetail = (params) => {
 export const getExerciseList = (params) => {
   const { type, take = '', cursorId = '' } = params
   return getRequest(`/fitness_machine/${type}?take=${take}&cursorId=${cursorId}`)
+}
+
+// 운동 공유하기
+export const postExerciseShare = (data) => {
+  return postRequest(`/exercise_volume/share`, data)
 }

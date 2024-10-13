@@ -77,7 +77,7 @@ const Exercise = () => {
     if (setType === 'add') {
       const uniqueSet = new Set(userExerciseList.map((item) => item.fitness_machine_id))
       if (!uniqueSet.has(selectedData.fitness_machine_id)) {
-        const tempData = { ...selectedData, each_tot_weight: eachTotWeight }
+        const tempData = { ...selectedData, each_tot_weight: eachTotWeight, grams }
         setUserExerciseList((prev) => [...prev, tempData])
       }
     } else if (setType === 'remove') {

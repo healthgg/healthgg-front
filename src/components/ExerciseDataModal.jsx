@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { exerciseGramState, eachTotalWeightState } from 'atoms/exerciseAtom'
 
@@ -22,18 +22,13 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
     { id: 'sets', name: '세트', placeholder: '총 세트 수를 적어주세요.' },
   ]
 
-  const onChangeInput = (e, id) => {
+  const onChangeInput = useCallback((e, id) => {
     const txt = e.target.value
-    const regex = /^(0|[1-9]\d{0,3}|)$/
-    if (regex.test(txt)) {
-      setGrams((prev) => ({
-        ...prev,
-        [id]: txt,
-      }))
-    } else {
-      alert('0부터 9999까지의 숫자만 입력 가능합니다.')
-    }
-  }
+    setGrams((prev) => ({
+      ...prev,
+      [id]: txt,
+    }))
+  }, [])
 
   const onResetInput = (id) => {
     setGrams((prev) => ({
@@ -42,10 +37,21 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
     }))
   }
 
+  const validInput = () => {
+    const regex = /^(0|[1-9]\d{0,3}|)$/
+    const isNotNumber = Object.values(grams).some((txt) => !regex.test(txt))
+    if (isNotNumber) {
+      alert('0부터 9999까지의 숫자만 입력 가능합니다.')
+      return
+    }
+    onClick()
+  }
+
   useEffect(() => {
     const { reps, weight, sets } = grams
-    setEachTotWeight(+reps + +weight + +sets)
-  }, [grams])
+    const totalWeight = (+reps || 0) + (+weight || 0) + (+sets || 0)
+    setEachTotWeight(totalWeight)
+  }, [grams, setEachTotWeight])
 
   return (
     <BackgroundDiv>
@@ -62,6 +68,7 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
                 value={grams[id]}
                 placeholder={placeholder}
                 onChange={(e) => onChangeInput(e, id)}
+                onFocus={(e) => e.target.select()}
                 autoComplete="off"
               />
               {id && <StyledClose onClick={() => onResetInput(id)} />}
@@ -70,7 +77,7 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
         </WrapInputDiv>
         <TotalWeightP>총 중량 {eachTotWeight}kg</TotalWeightP>
         <WrapCtaDiv>
-          <Button color="mainBlue" onClick={onClick}>
+          <Button color="mainBlue" onClick={validInput}>
             추가
           </Button>
           <Button onClick={onClose}>취소</Button>

@@ -205,7 +205,13 @@ const Footer = () => {
           </section>
         )}
       </WrapFooter>
-      {showShareCalcModal && <Portal portalType="shareCalcModal" onClose={() => setShowShareCalcModal(false)} />}
+      {showShareCalcModal && (
+        <Portal
+          portalType="shareCalcModal"
+          dataFlag={pathname === '/meal/calc' ? 'food' : 'exercise'}
+          onClose={() => setShowShareCalcModal(false)}
+        />
+      )}
     </>
   )
 }
