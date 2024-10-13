@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { currentVisitorState } from 'atoms/visitorAtroms'
 
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { io } from 'socket.io-client'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -18,7 +19,7 @@ import { iconCalc, iconMeal, iconProtein } from 'assets/icon'
 const Main = () => {
   const navigate = useNavigate()
 
-  const [currentVisitor, setCurrentVisitor] = useState(0)
+  const currentVisitor = useRecoilValue(currentVisitorState)
   const [totalVisitor, setTotalVisitor] = useState(0)
   const [bestList, setBestList] = useState([])
 
@@ -35,15 +36,6 @@ const Main = () => {
     queryFn: () => getMain(),
     throwOnError: (err) => console.error(err),
   })
-
-  useEffect(() => {
-    const socket = io(process.env.REACT_APP_WEBSOCKET_URL)
-    socket.on('clientsCount', (count) => setCurrentVisitor(count))
-    return () => {
-      socket.off('clientsCount')
-      socket.disconnect()
-    }
-  }, [])
 
   useEffect(() => {
     if (isSuccess) {

@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
+import { currentVisitorState } from 'atoms/visitorAtroms'
 
 import { useNavigate } from 'react-router-dom'
+import { io } from 'socket.io-client'
 
 import styled from 'styled-components'
 
@@ -12,8 +15,18 @@ import Portal from './Portal'
 const Navbar = () => {
   const navigate = useNavigate()
   const [showSidebar, setShowSidebar] = useState(false)
+  const setCurrentVisitor = useSetRecoilState(currentVisitorState)
 
   const toggleSidebar = () => setShowSidebar(!showSidebar)
+
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_WEBSOCKET_URL)
+    socket.on('clientsCount', (count) => setCurrentVisitor(count))
+    return () => {
+      socket.off('clientsCount')
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <WrapNav>
