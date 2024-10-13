@@ -15,8 +15,8 @@ const Sidebar = ({ onClose }) => {
   const sidebarList = [
     { name: '홈', path: '/', src: iconHome, alt: '집' },
     { name: '프로틴 섭취량 계산기', path: '/protein-calc', src: iconProtein, alt: '프로틴' },
-    { name: '운동볼륨 계산기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
     { name: '1RM 계산기', path: '/1rm-calc', src: iconCalc, alt: '계산기' },
+    { name: '커스텀 운동볼륨 만들기', path: '/exercise-volume', src: iconCalc, alt: '계산기' },
     { name: '커스텀 식단 만들기', path: '/meal', src: iconMeal, alt: '접시' },
   ]
 
