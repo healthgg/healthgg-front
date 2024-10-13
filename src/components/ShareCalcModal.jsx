@@ -1,4 +1,5 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useState } from 'react'
+import { useRecoilState } from 'recoil'
 import { userMealListState, mealTitleState, mealDescState } from 'atoms/mealAtom'
 
 import { useMutation } from '@tanstack/react-query'
@@ -8,16 +9,19 @@ import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
+import { imgDone } from 'assets/img'
 
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 import QuadImages from './QuadImages'
 import Button from './Button'
+import Image from './Image'
 
-const ShareCalcModal = ({ onClose, onClick }) => {
-  const userMealList = useRecoilValue(userMealListState)
+const ShareCalcModal = ({ onClose }) => {
+  const [userMealList, setUserMealList] = useRecoilState(userMealListState)
   const [mealTitle, setMealTitle] = useRecoilState(mealTitleState)
   const [mealDesc, setMealDesc] = useRecoilState(mealDescState)
+  const [showDoneContent, setShowDoneContent] = useState(false)
 
   const navigate = useNavigate()
 
@@ -36,19 +40,35 @@ const ShareCalcModal = ({ onClose, onClick }) => {
     setMealDesc(txt)
   }
 
+  const onResetAllData = () => {
+    setUserMealList({
+      [BREAKFAST]: [],
+      [LUNCH]: [],
+      [DINNER]: [],
+    })
+    setMealTitle('')
+    setMealDesc('')
+  }
+
   const mutation = useMutation({
     mutationFn: (data) => postMealShare(data),
     onSuccess: (res) => {
       if (String(res.status) === '201') {
-        onClose()
-        alert('식단 공유 완료')
-        navigate('/')
+        setShowDoneContent(true)
       }
     },
     onError: (err) => {
       console.error('postMealShare err', err)
+      onClose()
     },
   })
+
+  const onCloseDoneModal = () => {
+    onClose()
+    setShowDoneContent(false)
+    onResetAllData()
+    navigate('/')
+  }
 
   const shareCalcData = () => {
     const data = {
@@ -63,7 +83,17 @@ const ShareCalcModal = ({ onClose, onClick }) => {
     mutation.mutate({ data })
   }
 
-  return (
+  return showDoneContent ? (
+    <BackgroundDiv>
+      <DoneSection>
+        <Image src={imgDone} alt="공유 완료 이미지" width="100px" height="100px" />
+        <h1>식단 공유 완료</h1>
+        <Button color="mainBlue" width="regular" height="regular" onClick={onCloseDoneModal}>
+          확인
+        </Button>
+      </DoneSection>
+    </BackgroundDiv>
+  ) : (
     <BackgroundDiv>
       <CalcDataSection>
         <h1>식단 공유하기</h1>
@@ -115,6 +145,30 @@ const BackgroundDiv = styled.div`
   max-width: 430px;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
+`
+
+const DoneSection = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 70%;
+  height: fit-content;
+  height: 250px;
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+  & > h1 {
+    font-size: ${({ theme }) => theme.fontSize.subTitle};
+    font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+  }
+  & > button {
+  }
 `
 
 const CalcDataSection = styled.section`
