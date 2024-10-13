@@ -20,7 +20,6 @@ const Meal = () => {
   const [userMealList, setUserMealList] = useRecoilState(userMealListState)
   const [grams, setGrams] = useRecoilState(mealGramState)
   const [keyword, setKeyword] = useState('')
-  const [mealObject, setMealObject] = useState('muscles')
   const [showMealModal, setShowMealModal] = useState(false)
 
   const nutrientList = [
@@ -31,11 +30,6 @@ const Meal = () => {
     { tabId: '4', tabName: '비타민' },
   ]
   const repastList = [BREAKFAST, LUNCH, DINNER]
-  const mealObjectList = [
-    { id: 'muscles', title: '근성장' },
-    { id: 'diet', title: '다이어트' },
-    { id: 'maintain', title: '체중유지' },
-  ]
 
   const { data, isLoading, isSuccess, isError, error } = useQuery({
     queryKey: ['getNutrientList', curMainTab],
@@ -130,20 +124,6 @@ const Meal = () => {
           <p>추가할 식단을 선택해주세요.</p>
         )}
       </SelectedUl>
-      <RadioUl>
-        {mealObjectList.map((list) => (
-          <li key={uuidv4()}>
-            <input
-              type="radio"
-              id={list.id}
-              name="mealObject"
-              checked={list.id === mealObject}
-              onChange={() => setMealObject(list.id)}
-            />
-            <label htmlFor={list.id}>{list.title}</label>
-          </li>
-        ))}
-      </RadioUl>
       {/* <input value={onChangeKeyword} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeWord} /> */}
       <ItemsDiv>
         {data &&
@@ -253,24 +233,11 @@ const CloseButton = styled.button`
   color: ${({ theme }) => theme.colors.bgWhite};
 `
 
-const RadioUl = styled.ul`
-  display: flex;
-  gap: 20px;
-  margin: 20px 0;
-  & > li {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    & * {
-      cursor: pointer;
-    }
-  }
-`
-
 const ItemsDiv = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 28px 16px;
+  margin-top: 20px;
   & img {
     width: 100%;
     height: 136px;

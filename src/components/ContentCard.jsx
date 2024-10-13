@@ -54,6 +54,7 @@ const TitleDiv = styled.div`
 `
 
 const TitleH2 = styled.h2`
+  margin-top: 8px;
   width: ${({ $showBtn }) => ($showBtn ? 'calc(100% - 40px)' : '100%')};
   font-size: 20px;
   font-weight: ${({ theme }) => theme.fontWeight.title};
