@@ -1,96 +1,145 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useState } from 'react'
+import { useRecoilState } from 'recoil'
 import { userMealListState, mealTitleState, mealDescState } from 'atoms/mealAtom'
+import { userExerciseListState } from 'atoms/exerciseAtom'
 
 import { useMutation } from '@tanstack/react-query'
 import { postMealShare } from 'api/meal'
+import { postExerciseShare } from 'api/exercise'
 
 import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
+import { imgDone } from 'assets/img'
 
-import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
+import { FOOD_IMG_ARR_KEY, EXERCISE_IMG_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 import QuadImages from './QuadImages'
 import Button from './Button'
+import Image from './Image'
 
-const ShareCalcModal = ({ onClose, onClick }) => {
-  const userMealList = useRecoilValue(userMealListState)
-  const [mealTitle, setMealTitle] = useRecoilState(mealTitleState)
-  const [mealDesc, setMealDesc] = useRecoilState(mealDescState)
+const ShareCalcModal = ({ dataFlag, onClose }) => {
+  const [userMealList, setUserMealList] = useRecoilState(userMealListState)
+  const [title, setTitle] = useRecoilState(mealTitleState)
+  const [desc, setDesc] = useRecoilState(mealDescState)
+
+  const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
+
+  const [showDoneContent, setShowDoneContent] = useState(false)
 
   const navigate = useNavigate()
 
-  const urlArrs = Object.values(userMealList).reduce((acc, meals) => {
-    meals.forEach((meal) => acc.push(meal.food_imageurl))
-    return acc
-  }, [])
+  const isTypeFood = dataFlag === 'meal'
+  const targetArr = isTypeFood ? userMealList : userExerciseList
+  const targetTxt = isTypeFood ? '식단' : '운동볼륨'
+  const imagesKey = isTypeFood ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_KEY
+
+  const urlArrs = () => {
+    return Object.values(targetArr).reduce((acc, data) => {
+      if (isTypeFood) {
+        data.forEach((value) => acc.push(value[imagesKey]))
+      } else {
+        acc.push(data[imagesKey])
+      }
+      return acc
+    }, [])
+  }
 
   const onChangeInput = (e) => {
     const txt = e.target.value
-    setMealTitle(txt)
+    setTitle(txt)
   }
 
   const onChangeTxtArea = (e) => {
     const txt = e.target.value
-    setMealDesc(txt)
+    setDesc(txt)
+  }
+
+  const onResetAllData = () => {
+    setUserMealList({
+      [BREAKFAST]: [],
+      [LUNCH]: [],
+      [DINNER]: [],
+    })
+    setUserExerciseList([])
+    setTitle('')
+    setDesc('')
   }
 
   const mutation = useMutation({
-    mutationFn: (data) => postMealShare(data),
+    mutationFn: (data) => (isTypeFood ? postMealShare(data) : postExerciseShare(data)),
     onSuccess: (res) => {
       if (String(res.status) === '201') {
-        onClose()
-        alert('식단 공유 완료')
-        navigate('/')
+        setShowDoneContent(true)
       }
     },
     onError: (err) => {
       console.error('postMealShare err', err)
+      onClose()
     },
   })
 
+  const onCloseDoneModal = () => {
+    onClose()
+    setShowDoneContent(false)
+    onResetAllData()
+    navigate('/')
+  }
+
   const shareCalcData = () => {
     const data = {
-      title: mealTitle,
-      sub_title: mealDesc,
-      description: {
-        Breakfast: userMealList[BREAKFAST],
-        Lunch: userMealList[LUNCH],
-        Dinner: userMealList[DINNER],
-      },
+      title,
+      sub_title: desc,
+      description: isTypeFood
+        ? {
+            Breakfast: userMealList[BREAKFAST],
+            Lunch: userMealList[LUNCH],
+            Dinner: userMealList[DINNER],
+          }
+        : userExerciseList,
     }
     mutation.mutate({ data })
   }
 
-  return (
+  return showDoneContent ? (
+    <BackgroundDiv>
+      <DoneSection>
+        <Image src={imgDone} alt="공유 완료 이미지" width="100px" height="100px" />
+        <h1>{targetTxt} 공유 완료</h1>
+        <Button color="mainBlue" width="regular" height="regular" onClick={onCloseDoneModal}>
+          확인
+        </Button>
+      </DoneSection>
+    </BackgroundDiv>
+  ) : (
     <BackgroundDiv>
       <CalcDataSection>
-        <h1>식단 공유하기</h1>
+        <h1>{targetTxt} 공유하기</h1>
         <WrapQuadImgDiv>
-          <QuadImages urlArrs={urlArrs} />
+          <QuadImages urlArrs={urlArrs()} />
         </WrapQuadImgDiv>
         <WrapInputDiv>
-          <label htmlFor="mealTitle">식단 제목</label>
+          <label htmlFor="title">{targetTxt} 제목</label>
           <input
-            id="mealTitle"
-            value={mealTitle}
-            placeholder="식단의 제목을 적어주세요."
+            id="title"
+            value={title}
+            placeholder={`공유할 ${targetTxt}의 제목을 적어주세요.`}
             onChange={onChangeInput}
             autoComplete="off"
           />
-          {mealTitle && <StyledInputClose onClick={() => setMealTitle('')} />}
+          {title && <StyledInputClose onClick={() => setTitle('')} />}
         </WrapInputDiv>
         <WrapTxtAreaDiv>
-          <label htmlFor="mealDesc">식단 제목</label>
+          <label htmlFor="desc">{targetTxt} 설명</label>
           <textarea
-            id="mealDesc"
-            value={mealDesc}
-            placeholder="식단의 설명을 적어주세요."
+            id="desc"
+            value={desc}
+            placeholder={`공유할 ${targetTxt}의 설명을 적어주세요.`}
             onChange={onChangeTxtArea}
             autoComplete="off"
           />
-          {mealDesc && <StyledTxtAreaClose onClick={() => setMealDesc('')} />}
+          {desc && <StyledTxtAreaClose onClick={() => setDesc('')} />}
         </WrapTxtAreaDiv>
         <WrapCtaDiv>
           <Button color="mainBlue" onClick={shareCalcData}>
@@ -115,6 +164,30 @@ const BackgroundDiv = styled.div`
   max-width: 430px;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
+`
+
+const DoneSection = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 70%;
+  height: fit-content;
+  height: 250px;
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+  & > h1 {
+    font-size: ${({ theme }) => theme.fontSize.subTitle};
+    font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+  }
+  & > button {
+  }
 `
 
 const CalcDataSection = styled.section`

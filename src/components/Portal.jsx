@@ -11,7 +11,7 @@ const Portal = ({ portalType, dataFlag, data, onClose, onClick }) => {
     sidebar: <Sidebar onClose={onClose} />,
     mealModal: <MealDataModal data={data} onClose={onClose} onClick={onClick} />,
     exerciseModal: <ExerciseDataModal data={data} onClose={onClose} onClick={onClick} />,
-    shareCalcModal: <ShareCalcModal dataFlag={dataFlag} data={data} onClose={onClose} onClick={onClick} />,
+    shareCalcModal: <ShareCalcModal dataFlag={dataFlag} onClose={onClose} />,
   }
 
   return createPortal(componentToRender[portalType] ?? null, modalRoot)

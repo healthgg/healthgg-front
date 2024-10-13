@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { DetailCard } from 'components'
-import { FOOD_IMG_ARR_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
+import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const MealCalc = () => {
   const [curSubTab, setCurSubTab] = useState(BREAKFAST)

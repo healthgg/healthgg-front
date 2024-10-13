@@ -15,8 +15,8 @@ const DetailCard = ({ type, list }) => {
     { ko: '지방', en: 'fat' },
   ]
   const routineNamesArr = [
-    { ko: '세트', en: 'set' },
-    { ko: '반복횟수', en: 'repetition' },
+    { ko: '세트', en: 'sets' },
+    { ko: '반복횟수', en: 'reps' },
     { ko: '무게', en: 'weight' },
     { ko: '총 중량', en: 'total_weight' },
   ]
@@ -43,10 +43,10 @@ const DetailCard = ({ type, list }) => {
                   {isTypeFood
                     ? name.en === 'food_name'
                       ? data?.food_name
-                      : name.en === 'calory' || name.en === 'protein' || name.en === 'carbohydrate' || name.en === 'fat'
-                        ? `${data?.nutrient?.[name.en]} ${data?.nutrient?.unit || 'g'}`
-                        : data?.nutrient?.[name.en]
-                    : data?.[name.en]}
+                      : data?.nutrient?.[name.en]
+                    : name.en === 'total_weight'
+                      ? data?.each_tot_weight
+                      : data?.grams?.[name.en]}
                 </span>
               </p>
             ))}

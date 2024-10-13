@@ -14,7 +14,7 @@ import { PageTitle, Image, Button, Portal, Loading } from 'components'
 import { FOOD_IMG_ARR_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const Meal = () => {
-  const [curMainTab, setCurMainTab] = useState('1')
+  const [curMainTab, setCurMainTab] = useState('0')
   const [curSubTab, setCurSubTab] = useState(BREAKFAST)
   const [curClickedObj, setCurClickedObj] = useState({})
   const [userMealList, setUserMealList] = useRecoilState(userMealListState)
@@ -24,6 +24,7 @@ const Meal = () => {
   const [showMealModal, setShowMealModal] = useState(false)
 
   const nutrientList = [
+    { tabId: '0', tabName: '전체' },
     { tabId: '1', tabName: '단백질' },
     { tabId: '2', tabName: '탄수화물' },
     { tabId: '3', tabName: '지방' },
