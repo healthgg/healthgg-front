@@ -30,7 +30,7 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
 
   const navigate = useNavigate()
 
-  const isTypeFood = dataFlag === 'meal'
+  const isTypeFood = dataFlag === 'food'
   const targetArr = isTypeFood ? userMealList : userExerciseList
   const targetTxt = isTypeFood ? '식단' : '운동볼륨'
   const imagesKey = isTypeFood ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_KEY

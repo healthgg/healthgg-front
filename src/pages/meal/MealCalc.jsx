@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
 
+import { useMutation } from '@tanstack/react-query'
+import { postMealDownload } from 'api/meal'
+
 import styled from 'styled-components'
 
 import { v4 as uuidv4 } from 'uuid'
+import { saveAs } from 'file-saver'
 
-import { DetailCard } from 'components'
+import { DetailCard, Button } from 'components'
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const MealCalc = () => {
@@ -15,10 +19,32 @@ const MealCalc = () => {
 
   const repastList = [BREAKFAST, LUNCH, DINNER]
 
+  const mutation = useMutation({
+    mutationFn: (data) => postMealDownload(data),
+    onSuccess: (res) => {
+      const filename = 'healthgg_meal_volume.xlsx'
+      saveAs(new Blob([res.data]), filename)
+    },
+    onError: (err) => {
+      console.error('postMealShare err', err)
+    },
+  })
+
+  const downloadExcel = () => {
+    mutation.mutate({
+      data: {
+        Breakfast: userMealList[BREAKFAST],
+        Lunch: userMealList[LUNCH],
+        Dinner: userMealList[DINNER],
+      },
+    })
+  }
+
   return (
     <>
       <WrapExcelSection>
         <SectionTitleH1>영양성분 계산하기</SectionTitleH1>
+        <Button onClick={() => downloadExcel()}>엑셀파일 다운로드</Button>
       </WrapExcelSection>
       <section>
         <SectionTitleH1>총 섭취량</SectionTitleH1>
@@ -69,7 +95,15 @@ const MealCalc = () => {
 export default MealCalc
 
 const WrapExcelSection = styled.section`
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
+  & > button {
+    padding: 5px 8px;
+    background-color: #207345;
+    font-size: 14px;
+    color: white;
+  }
 `
 
 const SectionTitleH1 = styled.h1`

@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { userExerciseListState } from 'atoms/exerciseAtom'
 
+import { useMutation } from '@tanstack/react-query'
+import { postExerciseDownload } from 'api/exercise'
+
+import { saveAs } from 'file-saver'
+
 import styled from 'styled-components'
 
-import { DetailCard } from 'components'
+import { DetailCard, Button } from 'components'
 
 const ExerciseCalc = () => {
   const userExerciseList = useRecoilValue(userExerciseListState)
@@ -16,10 +20,26 @@ const ExerciseCalc = () => {
     }, 0)
   }
 
+  const mutation = useMutation({
+    mutationFn: (data) => postExerciseDownload(data),
+    onSuccess: (res) => {
+      const filename = 'healthgg_exercise_volume.xlsx'
+      saveAs(new Blob([res.data]), filename)
+    },
+    onError: (err) => {
+      console.error('postExerciseDownload err', err)
+    },
+  })
+
+  const downloadExcel = () => {
+    mutation.mutate({ data: userExerciseList })
+  }
+
   return (
     <>
       <WrapExcelSection>
         <SectionTitleH1>총 운동볼륨 계산하기</SectionTitleH1>
+        <Button onClick={() => downloadExcel()}>엑셀파일 다운로드</Button>
       </WrapExcelSection>
       <section>
         <SectionTitleDiv>
@@ -37,7 +57,15 @@ const ExerciseCalc = () => {
 export default ExerciseCalc
 
 const WrapExcelSection = styled.section`
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
+  & > button {
+    padding: 5px 8px;
+    background-color: #207345;
+    font-size: 14px;
+    color: white;
+  }
 `
 
 const SectionTitleH1 = styled.h1`

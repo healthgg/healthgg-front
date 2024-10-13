@@ -20,3 +20,8 @@ export const getNutrientList = (params) => {
 export const postMealShare = (data) => {
   return postRequest(`/food/share`, data)
 }
+
+// 식단 엑셀 다운로드
+export const postMealDownload = (data) => {
+  return postRequest(`/food/excel`, data)
+}

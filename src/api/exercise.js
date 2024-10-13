@@ -20,3 +20,8 @@ export const getExerciseList = (params) => {
 export const postExerciseShare = (data) => {
   return postRequest(`/exercise_volume/share`, data)
 }
+
+// 운동볼륨 엑셀 다운로드
+export const postExerciseDownload = (data) => {
+  return postRequest(`/exercise_volume/excel`, data)
+}
