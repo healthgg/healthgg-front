@@ -59,14 +59,49 @@ const MealCalc = () => {
     setUserMealExcel(mealExcelData)
   }, [userMealList])
 
+  // 총 섭취량 계산 함수
+  const getTotalNutrients = (meals) => {
+    return meals.reduce(
+      (totals, meal) => {
+        return {
+          calory: Math.round((totals.calory + (Number(meal?.nutrient?.calory) || 0)) * 10) / 10,
+          protein: Math.round((totals.protein + (Number(meal?.nutrient?.protein) || 0)) * 10) / 10,
+          carbohydrate: Math.round((totals.carbohydrate + (Number(meal?.nutrient?.carbohydrate) || 0)) * 10) / 10,
+          fat: Math.round((totals.fat + (Number(meal?.nutrient?.fat) || 0)) * 10) / 10,
+        }
+      },
+      { calory: 0, protein: 0, carbohydrate: 0, fat: 0 },
+    )
+  }
+
+  const totalNutrients = getTotalNutrients(userMealList?.[curSubTab] || [])
+
+  const totalNutrientsSum = getTotalNutrients(
+    (userMealList?.[BREAKFAST] || []).concat(userMealList?.[LUNCH] || []).concat(userMealList?.[DINNER] || []),
+  )
   return (
     <>
       <WrapExcelSection>
         <SectionTitleH1>영양성분 계산하기</SectionTitleH1>
         <Button onClick={() => downloadExcel()}>엑셀파일 다운로드</Button>
       </WrapExcelSection>
+
       <section>
-        <SectionTitleH1>총 섭취량</SectionTitleH1>
+        <SectionTitleH1>하루 총 섭취량</SectionTitleH1>
+        <SectionTotalNutrientsSum>
+          <p>
+            칼로리 <br /> {totalNutrientsSum.calory}kcal
+          </p>
+          <p>
+            단백질 <br /> {totalNutrientsSum.protein}g
+          </p>
+          <p>
+            탄수화물 <br /> {totalNutrientsSum.carbohydrate}g
+          </p>
+          <p>
+            지방 <br /> {totalNutrientsSum.fat}g
+          </p>
+        </SectionTotalNutrientsSum>
         <LinedTabUl>
           {repastList.map((repast) => (
             <LinedTabLi key={uuidv4()} $curValue={curSubTab === repast}>
@@ -101,6 +136,15 @@ const MealCalc = () => {
                 </tr>
               ))}
             </tbody>
+            <tbody>
+              <tr>
+                <td>총 섭취량</td>
+                <td>{totalNutrients.calory}kcal</td>
+                <td>{totalNutrients.protein}g</td>
+                <td>{totalNutrients.carbohydrate}g</td>
+                <td>{totalNutrients.fat}g</td>
+              </tr>
+            </tbody>
           </SelectedTable>
         </WrapTableDiv>
         <WrapCardsDiv>
@@ -126,6 +170,19 @@ const WrapExcelSection = styled.section`
   }
 `
 
+const SectionTotalNutrientsSum = styled.h2`
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  & > p {
+    text-align: center;
+    margin-top: 12px;
+    color: ${({ theme }) => theme.colors.mainBlue};
+    font-size: ${({ theme }) => theme.fontSize.medium};
+    font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+  }
+`
+
 const SectionTitleH1 = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.medium};
   font-weight: ${({ theme }) => theme.fontWeight.subTitle};
@@ -134,6 +191,7 @@ const SectionTitleH1 = styled.h1`
 const LinedTabUl = styled.ul`
   display: flex;
   height: 40px;
+  margin-top: 16px;
 `
 
 const LinedTabLi = styled.li`

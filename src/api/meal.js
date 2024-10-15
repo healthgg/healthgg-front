@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from './instance'
+import { getRequest, postRequest, postRequestExcel } from './instance'
 
 // BEST 식단 조회
 export const getMealBest = () => {
@@ -24,7 +24,7 @@ export const postMealShare = (data) => {
 // 식단 엑셀 다운로드
 export const postMealDownload = (data) => {
   // Blob 형식으로 받기 위해 responseType을 'blob'으로 설정
-  return postRequest(`/food/excel`, data, {
+  return postRequestExcel(`/food/excel`, data, {
     responseType: 'blob',
   })
 }
