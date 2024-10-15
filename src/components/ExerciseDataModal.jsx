@@ -61,7 +61,7 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
         {data?.fitness_machine_notice && <ExerciseDescP>{data?.fitness_machine_notice}</ExerciseDescP>}
         <WrapInputDiv>
           {exercisePlanList.map(({ id, name, placeholder }) => (
-            <div key={uuidv4()}>
+            <div key={id}>
               <label htmlFor={id}>{name}</label>
               <input
                 id={id}

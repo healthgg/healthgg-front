@@ -13,6 +13,25 @@ import { DetailCard, Button } from 'components'
 const ExerciseCalc = () => {
   const userExerciseList = useRecoilValue(userExerciseListState)
 
+  const newUserExerciseList = userExerciseList.map((e) => {
+    const a = {}
+    // 카멜케이스 땜에 따로
+    // const {
+    //   fitness_machine_name,
+    //   grams: { reps, sets, weight },
+    //   each_tot_weight,
+    // } = e
+    const {
+      grams: { reps, sets, weight },
+    } = e
+    a.fitness_machine_name = e.fitness_machine_name
+    a.repetition = +reps
+    a.set = +sets
+    a.weight = +weight
+    a.total_weight = e.each_tot_weight
+    return a
+  })
+
   const getTotWeight = () => {
     return userExerciseList.reduce((acc, cur) => {
       const { each_tot_weight: weight = 0 } = cur
@@ -32,7 +51,7 @@ const ExerciseCalc = () => {
   })
 
   const downloadExcel = () => {
-    mutation.mutate({ data: userExerciseList })
+    mutation.mutate({ data: newUserExerciseList })
   }
 
   return (
@@ -43,7 +62,7 @@ const ExerciseCalc = () => {
       </WrapExcelSection>
       <section>
         <SectionTitleDiv>
-          <p>운동볼륨</p>
+          <p>총 운동볼륨</p>
           <p>{getTotWeight()}kg</p>
         </SectionTitleDiv>
         <WrapCardsDiv>
@@ -61,9 +80,10 @@ const WrapExcelSection = styled.section`
   justify-content: space-between;
   margin-bottom: 30px;
   & > button {
-    padding: 5px 8px;
+    padding: 8px 12px;
     background-color: #207345;
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
     color: white;
   }
 `
@@ -102,8 +122,8 @@ const WrapCardsDiv = styled.div`
       border: 1px solid #cacaca;
       border-radius: 5px;
       img {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
         border: 1px solid #cacaca;
       }
       div {
@@ -111,7 +131,7 @@ const WrapCardsDiv = styled.div`
         p {
           display: flex;
           span {
-            font-size: 12px !important;
+            font-size: 14px !important;
           }
           span:first-child {
             width: 50px;

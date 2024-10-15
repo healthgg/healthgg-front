@@ -26,8 +26,13 @@ const getRequest = async (url) => {
   return response.data.data
 }
 
-const postRequest = async (url, data) => {
-  const response = await api.post(url, data)
+const postRequest = async (url) => {
+  const response = await api.post(url)
+  return response
+}
+
+const postRequestExcel = async (url, data, config = {}) => {
+  const response = await api.post(url, data, config)
   return response
 }
 
@@ -41,4 +46,4 @@ const deleteRequest = async (url) => {
   return response.data
 }
 
-export { api, postRequest, getRequest, putRequest, deleteRequest }
+export { api, postRequestExcel, postRequest, getRequest, putRequest, deleteRequest }

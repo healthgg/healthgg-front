@@ -99,9 +99,10 @@ const WrapExcelSection = styled.section`
   justify-content: space-between;
   margin-bottom: 30px;
   & > button {
-    padding: 5px 8px;
+    padding: 8px 12px;
     background-color: #207345;
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
     color: white;
   }
 `
@@ -147,9 +148,13 @@ const SelectedTable = styled.table`
   }
   th,
   td {
-    padding: 5px;
-    font-size: 12px;
+    padding: 8px 0px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
     text-align: center;
+  }
+  td {
+    color: ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -163,7 +168,7 @@ const WrapCardsDiv = styled.div`
     width: 100%;
     & > li {
       display: flex;
-      padding: 10px;
+      padding: 6px;
       gap: 8px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
       border: 1px solid #cacaca;
@@ -178,7 +183,7 @@ const WrapCardsDiv = styled.div`
         p {
           display: flex;
           span {
-            font-size: 12px !important;
+            font-size: 14px !important;
           }
           span:first-child {
             width: 50px;
