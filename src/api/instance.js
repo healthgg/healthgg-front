@@ -26,8 +26,8 @@ const getRequest = async (url) => {
   return response.data.data
 }
 
-const postRequest = async (url) => {
-  const response = await api.post(url)
+const postRequest = async (url, data) => {
+  const response = await api.post(url, data)
   return response
 }
 

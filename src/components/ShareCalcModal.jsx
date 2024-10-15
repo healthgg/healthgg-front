@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { userMealListState, mealTitleState, mealDescState } from 'atoms/mealAtom'
-import { userExerciseListState } from 'atoms/exerciseAtom'
+import { userExerciseListState, userExerciseExcelState } from 'atoms/exerciseAtom'
 
 import { useMutation } from '@tanstack/react-query'
 import { postMealShare } from 'api/meal'
@@ -25,6 +25,7 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
   const [desc, setDesc] = useRecoilState(mealDescState)
 
   const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
+  const [userExerciseExcel, setUserExerciseExcel] = useRecoilState(userExerciseExcelState)
 
   const [showDoneContent, setShowDoneContent] = useState(false)
 
@@ -63,6 +64,13 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
       [DINNER]: [],
     })
     setUserExerciseList([])
+    setUserExerciseExcel({
+      fitness_machine_name: '',
+      repetition: 0,
+      set: 0,
+      weight: 0,
+      total_weight: 0,
+    })
     setTitle('')
     setDesc('')
   }
@@ -99,7 +107,6 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
           }
         : userExerciseList,
     }
-    console.log({ data })
     mutation.mutate({ data })
   }
 
@@ -240,8 +247,8 @@ const WrapInputDiv = styled.div`
     padding: 12px 10px;
     width: 100%;
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.colors.bgWhite};\
-    margint-top: 12px
+    background-color: ${({ theme }) => theme.colors.bgWhite};
+    margin-top: 12px;
   }
   & > input:focus {
     outline: 2px solid ${({ theme }) => theme.colors.mainBlue};

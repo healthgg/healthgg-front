@@ -5,6 +5,17 @@ export const userExerciseListState = atom({
   default: [],
 })
 
+export const userExerciseExcelState = atom({
+  key: 'userExerciseExcelState',
+  default: {
+    fitness_machine_name: '',
+    repetition: 0,
+    set: 0,
+    weight: 0,
+    total_weight: 0,
+  },
+})
+
 export const exerciseGramState = atom({
   key: 'exerciseGramState',
   default: {

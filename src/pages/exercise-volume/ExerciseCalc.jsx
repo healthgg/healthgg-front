@@ -1,5 +1,6 @@
-import { useRecoilValue } from 'recoil'
-import { userExerciseListState } from 'atoms/exerciseAtom'
+import { useEffect } from 'react'
+import { useRecoilValue, useRecoilState } from 'recoil'
+import { userExerciseListState, userExerciseExcelState } from 'atoms/exerciseAtom'
 
 import { useMutation } from '@tanstack/react-query'
 import { postExerciseDownload } from 'api/exercise'
@@ -12,25 +13,7 @@ import { DetailCard, Button } from 'components'
 
 const ExerciseCalc = () => {
   const userExerciseList = useRecoilValue(userExerciseListState)
-
-  const newUserExerciseList = userExerciseList.map((e) => {
-    const a = {}
-    // 카멜케이스 땜에 따로
-    // const {
-    //   fitness_machine_name,
-    //   grams: { reps, sets, weight },
-    //   each_tot_weight,
-    // } = e
-    const {
-      grams: { reps, sets, weight },
-    } = e
-    a.fitness_machine_name = e.fitness_machine_name
-    a.repetition = +reps
-    a.set = +sets
-    a.weight = +weight
-    a.total_weight = e.each_tot_weight
-    return a
-  })
+  const [userExerciseExcel, setUserExerciseExcel] = useRecoilState(userExerciseExcelState)
 
   const getTotWeight = () => {
     return userExerciseList.reduce((acc, cur) => {
@@ -51,8 +34,24 @@ const ExerciseCalc = () => {
   })
 
   const downloadExcel = () => {
-    mutation.mutate({ data: newUserExerciseList })
+    mutation.mutate({ data: userExerciseExcel })
   }
+
+  useEffect(() => {
+    const exerciseExcelData = userExerciseList.reduce((acc, cur) => {
+      const { reps = 0, weight = 0, sets = 0 } = cur?.grams || {}
+      const temp = {
+        fitness_machine_name: cur?.fitness_machine_name || '',
+        repetition: +reps,
+        set: +sets,
+        weight: +weight,
+        total_weight: cur?.each_tot_weight || 0,
+      }
+      acc.push(temp)
+      return acc
+    }, [])
+    setUserExerciseExcel(exerciseExcelData)
+  }, [userExerciseList])
 
   return (
     <>
@@ -109,15 +108,17 @@ const SectionTitleDiv = styled.div`
 const WrapCardsDiv = styled.div`
   & > ul {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 15px;
     margin-top: 20px;
     width: 100%;
     & > li {
       display: flex;
-      padding: 10px;
-      gap: 8px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      gap: 20px;
+      max-width: 300px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
       border: 1px solid #cacaca;
       border-radius: 5px;
@@ -134,7 +135,7 @@ const WrapCardsDiv = styled.div`
             font-size: 14px !important;
           }
           span:first-child {
-            width: 50px;
+            width: 70px;
           }
         }
       }
