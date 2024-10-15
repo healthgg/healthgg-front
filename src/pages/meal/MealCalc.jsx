@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { userMealListState } from 'atoms/mealAtom'
+import { useState, useEffect } from 'react'
+import { useRecoilValue, useRecoilState } from 'recoil'
+import { userMealListState, userMealExcelState } from 'atoms/mealAtom'
 
 import { useMutation } from '@tanstack/react-query'
 import { postMealDownload } from 'api/meal'
@@ -14,8 +14,9 @@ import { DetailCard, Button } from 'components'
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const MealCalc = () => {
-  const [curSubTab, setCurSubTab] = useState(BREAKFAST)
   const userMealList = useRecoilValue(userMealListState)
+  const [userMealExcel, setUserMealExcel] = useRecoilState(userMealExcelState)
+  const [curSubTab, setCurSubTab] = useState(BREAKFAST)
 
   const repastList = [BREAKFAST, LUNCH, DINNER]
 
@@ -31,14 +32,32 @@ const MealCalc = () => {
   })
 
   const downloadExcel = () => {
-    mutation.mutate({
-      data: {
-        Breakfast: userMealList[BREAKFAST],
-        Lunch: userMealList[LUNCH],
-        Dinner: userMealList[DINNER],
-      },
-    })
+    mutation.mutate({ data: userMealExcel })
   }
+
+  useEffect(() => {
+    const mealExcelData = Object.entries(userMealList).reduce(
+      (acc, [key, values]) => {
+        const targetKey = key === BREAKFAST ? 'Breakfast' : key === LUNCH ? 'Lunch' : 'Dinner'
+        values.forEach((val) => {
+          acc[targetKey].push({
+            food_name: val.food_name,
+            calory: val.nutrient.calory,
+            protein: val.nutrient.protein,
+            carbohydrate: val.nutrient.carbohydrate,
+            fat: val.nutrient.fat,
+          })
+        })
+        return acc
+      },
+      {
+        Breakfast: [],
+        Lunch: [],
+        Dinner: [],
+      },
+    )
+    setUserMealExcel(mealExcelData)
+  }, [userMealList])
 
   return (
     <>
