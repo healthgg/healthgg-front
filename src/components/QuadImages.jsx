@@ -25,4 +25,6 @@ const QuadImagesWrap = styled.div`
   width: 190px;
   height: 140px;
   overflow: hidden;
+  border: 1px solid #c9c9c9;
+  border-radius: 3px;
 `

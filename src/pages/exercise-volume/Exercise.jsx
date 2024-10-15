@@ -253,6 +253,10 @@ const ContentCardWrap = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  & > img {
+    border: 1px solid #c9c9c9;
+    border-radius: 3px;
+  }
 `
 
 const TitleDiv = styled.div`
