@@ -173,7 +173,7 @@ const WrapExcelSection = styled.section`
 const SectionTotalNutrientsSum = styled.h2`
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   & > p {
     text-align: center;
     margin-top: 12px;
@@ -229,9 +229,6 @@ const SelectedTable = styled.table`
     font-size: ${({ theme }) => theme.fontSize.regular};
     font-weight: ${({ theme }) => theme.fontWeight.medium};
     text-align: center;
-  }
-  td {
-    color: ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
