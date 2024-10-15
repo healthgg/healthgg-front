@@ -161,21 +161,23 @@ const SelectedTable = styled.table`
 const WrapCardsDiv = styled.div`
   & > ul {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 15px;
     margin-top: 20px;
     width: 100%;
     & > li {
       display: flex;
-      padding: 6px;
-      gap: 8px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      gap: 20px;
+      max-width: 300px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
       border: 1px solid #cacaca;
       border-radius: 5px;
       img {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
         border: 1px solid #cacaca;
       }
       div {
@@ -186,7 +188,7 @@ const WrapCardsDiv = styled.div`
             font-size: 14px !important;
           }
           span:first-child {
-            width: 50px;
+            width: 70px;
           }
         }
       }

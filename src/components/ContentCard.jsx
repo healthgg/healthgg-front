@@ -14,13 +14,13 @@ const ContentCard = ({ type, isQuad, urlArrs, src, alt, title, desc, boardId, sh
   return (
     <ContentCardWrap>
       {isQuad ? (
-        <>
+        <button type="button" onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
           <QuadImages urlArrs={urlArrs} />
-          <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
+          <TitleDiv>
             <TitleH2>{title}</TitleH2>
           </TitleDiv>
           <p>{desc}</p>
-        </>
+        </button>
       ) : (
         <>
           <Image src={src} alt={alt} />
@@ -39,6 +39,9 @@ export default ContentCard
 
 const ContentCardWrap = styled.div`
   overflow: hidden;
+  & > button {
+    text-align: left;
+  }
   & > p {
     width: 100%;
     font-size: 16px;

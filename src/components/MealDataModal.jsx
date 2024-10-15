@@ -16,10 +16,10 @@ const MealDataModal = ({ data, onClose, onClick }) => {
 
   const gramBtnList = [10, 50, 100]
   const nutritinalList = [
-    { id: 'calory', name: '열량' },
-    { id: 'protein', name: '단백질' },
-    { id: 'carbohydrate', name: '탄수화물' },
-    { id: 'fat', name: '지방' },
+    { id: 'calory', name: '열량', unit: 'kcal' },
+    { id: 'protein', name: '단백질', unit: 'g' },
+    { id: 'carbohydrate', name: '탄수화물', unit: 'g' },
+    { id: 'fat', name: '지방', unit: 'g' },
   ]
 
   const onChangeInput = (e) => {
@@ -59,10 +59,13 @@ const MealDataModal = ({ data, onClose, onClick }) => {
         <div>
           <NutritinalInfoTitle>성분표</NutritinalInfoTitle>
           <NutritinalInfoUl>
-            {nutritinalList.map(({ id, name }) => (
+            {nutritinalList.map(({ id, name, unit }) => (
               <li key={uuidv4()}>
                 <span>{name}</span>
-                <span>{`${data?.nutrient?.[id]}${id === 'calory' ? 'kcal' : 'g'}`}</span>
+                <span>
+                  {data?.nutrient?.[id]}
+                  {unit}
+                </span>
               </li>
             ))}
           </NutritinalInfoUl>
@@ -186,12 +189,11 @@ const NutritinalInfoUl = styled.ul`
   margin-top: 8px;
   & li {
     flex: 1;
-    padding: 5px;
     & > span {
       display: inline-block;
       font-size: 14px;
+      padding: 6px 0;
       font-weight: ${({ theme }) => theme.fontWeight.subTitle};
-      margin: 5px 0px;
     }
     & > span:first-child {
       width: 100%;

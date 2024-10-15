@@ -8,17 +8,17 @@ import Image from './Image'
 
 const DetailCard = ({ type, list }) => {
   const nurientNamesArr = [
-    { ko: '영양소', en: 'food_name' },
-    { ko: '칼로리', en: 'calory' },
-    { ko: '단백질', en: 'protein' },
-    { ko: '탄수화물', en: 'carbohydrate' },
-    { ko: '지방', en: 'fat' },
+    { ko: '영양소', en: 'food_name', unit: '' },
+    { ko: '칼로리', en: 'calory', unit: 'kcal' },
+    { ko: '단백질', en: 'protein', unit: 'g' },
+    { ko: '탄수화물', en: 'carbohydrate', unit: 'g' },
+    { ko: '지방', en: 'fat', unit: 'g' },
   ]
   const routineNamesArr = [
-    { ko: '세트', en: 'sets' },
-    { ko: '반복횟수', en: 'reps' },
-    { ko: '무게', en: 'weight' },
-    { ko: '총 중량', en: 'total_weight' },
+    { ko: '세트', en: 'sets', unit: '' },
+    { ko: '반복횟수', en: 'reps', unit: '' },
+    { ko: '무게', en: 'weight', unit: 'kg' },
+    { ko: '총 중량', en: 'total_weight', unit: 'kg' },
   ]
   const isTypeFood = type === 'food'
   const targetArr = isTypeFood ? nurientNamesArr : routineNamesArr
@@ -47,6 +47,7 @@ const DetailCard = ({ type, list }) => {
                     : name.en === 'total_weight'
                       ? data?.each_tot_weight
                       : data?.grams?.[name.en]}
+                  {name.unit}
                 </span>
               </p>
             ))}
