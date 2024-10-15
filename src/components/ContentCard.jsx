@@ -14,13 +14,13 @@ const ContentCard = ({ type, isQuad, urlArrs, src, alt, title, desc, boardId, sh
   return (
     <ContentCardWrap>
       {isQuad ? (
-        <>
+        <button type="button" onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
           <QuadImages urlArrs={urlArrs} />
-          <TitleDiv onClick={browserTarget && boardId ? () => navigate(`/${browserTarget}/${boardId}`) : ''}>
+          <TitleDiv>
             <TitleH2>{title}</TitleH2>
           </TitleDiv>
           <p>{desc}</p>
-        </>
+        </button>
       ) : (
         <>
           <Image src={src} alt={alt} />
@@ -39,6 +39,9 @@ export default ContentCard
 
 const ContentCardWrap = styled.div`
   overflow: hidden;
+  & > button {
+    text-align: left;
+  }
   & > p {
     width: 100%;
     font-size: 16px;
@@ -51,10 +54,10 @@ const ContentCardWrap = styled.div`
 const TitleDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
 `
 
 const TitleH2 = styled.h2`
+  margin-top: 8px;
   width: ${({ $showBtn }) => ($showBtn ? 'calc(100% - 40px)' : '100%')};
   font-size: 20px;
   font-weight: ${({ theme }) => theme.fontWeight.title};
@@ -65,8 +68,8 @@ const TitleH2 = styled.h2`
   & + button {
     display: flex;
     align-items: center;
-    padding: 0 4px;
-    height: 18px;
-    font-size: 11px;
+    padding: 6px 8px;
+    height: 100%;
+    font-size: 13px;
   }
 `

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { userMealListState, mealTitleState, mealDescState } from 'atoms/mealAtom'
-import { userExerciseListState } from 'atoms/exerciseAtom'
+import { userExerciseListState, userExerciseExcelState } from 'atoms/exerciseAtom'
 
 import { useMutation } from '@tanstack/react-query'
 import { postMealShare } from 'api/meal'
@@ -25,12 +25,13 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
   const [desc, setDesc] = useRecoilState(mealDescState)
 
   const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
+  const [userExerciseExcel, setUserExerciseExcel] = useRecoilState(userExerciseExcelState)
 
   const [showDoneContent, setShowDoneContent] = useState(false)
 
   const navigate = useNavigate()
 
-  const isTypeFood = dataFlag === 'meal'
+  const isTypeFood = dataFlag === 'food'
   const targetArr = isTypeFood ? userMealList : userExerciseList
   const targetTxt = isTypeFood ? '식단' : '운동볼륨'
   const imagesKey = isTypeFood ? FOOD_IMG_ARR_KEY : EXERCISE_IMG_KEY
@@ -63,6 +64,13 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
       [DINNER]: [],
     })
     setUserExerciseList([])
+    setUserExerciseExcel({
+      fitness_machine_name: '',
+      repetition: 0,
+      set: 0,
+      weight: 0,
+      total_weight: 0,
+    })
     setTitle('')
     setDesc('')
   }
@@ -197,11 +205,11 @@ const CalcDataSection = styled.section`
   transform: translateX(-50%) translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
   width: 70%;
   height: fit-content;
-  max-height: 600px;
-  padding: 20px 30px;
+  max-height: 720px;
+  padding: 50px 30px;
   background: white;
   border-radius: 5px;
   text-align: center;
@@ -220,6 +228,9 @@ const CalcDataSection = styled.section`
 `
 
 const WrapQuadImgDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   img {
     width: 100%;
     height: 100%;
@@ -233,13 +244,14 @@ const WrapInputDiv = styled.div`
     display: none;
   }
   & > input {
-    padding: 10px 40px 10px 10px;
+    padding: 12px 10px;
     width: 100%;
     border-radius: 5px;
     background-color: ${({ theme }) => theme.colors.bgWhite};
+    margin-top: 12px;
   }
   & > input:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -250,7 +262,7 @@ const WrapTxtAreaDiv = styled.div`
     display: none;
   }
   & > textarea {
-    padding: 10px 30px 10px 10px;
+    padding: 12px 10px;
     width: 100%;
     height: 100px;
     border-radius: 5px;
@@ -263,7 +275,7 @@ const WrapTxtAreaDiv = styled.div`
     }
   }
   & > textarea:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -292,7 +304,8 @@ const WrapCtaDiv = styled.div`
   justify-content: center;
   gap: 15px;
   & > button {
-    padding: 5px 8px;
-    font-size: 14px;
+    padding: 6px 16px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
   }
 `

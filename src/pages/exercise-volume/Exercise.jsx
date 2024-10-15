@@ -175,7 +175,7 @@ const FilledButton = styled.button`
   border-radius: 3px;
   background-color: ${({ theme, $curValue }) => ($curValue ? theme.colors.mainBlue : theme.colors.bgWhite)};
   color: ${({ theme, $curValue }) => ($curValue ? theme.colors.bgWhite : theme.colors.typoBlack)};
-  font-size: 15px;
+  font-size: ${({ theme }) => theme.fontSize.regular};
   font-weight: ${({ theme, $curValue }) => ($curValue ? theme.fontWeight.title : theme.fontWeight.medium)};
 `
 
@@ -187,6 +187,15 @@ const SelectedUl = styled.ul`
   min-height: 128px;
   border-radius: 5px;
   background-color: ${({ theme }) => theme.colors.bgWhite};
+  & > p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+    color: ${({ theme }) => theme.colors.bgGray};
+  }
 `
 
 const SelectedContDiv = styled.div`
@@ -199,6 +208,11 @@ const SelectedContDiv = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  & > img {
+    border: 2px solid #c9c9c9;
+    border-radius: 3px;
   }
 `
 
@@ -233,7 +247,6 @@ const ContentCardWrap = styled.div`
     object-fit: contain;
   }
   & > p {
-    margin-top: 8px;
     width: 100%;
     font-size: 16px;
     white-space: nowrap;
@@ -250,7 +263,7 @@ const TitleDiv = styled.div`
 
 const TitleH2 = styled.h2`
   width: calc(100% - 40px);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: ${({ theme }) => theme.fontWeight.title};
   white-space: nowrap;
   overflow: hidden;
@@ -258,8 +271,8 @@ const TitleH2 = styled.h2`
   & + button {
     display: flex;
     align-items: center;
-    padding: 0 4px;
-    height: 18px;
-    font-size: 11px;
+    padding: 4px 8px;
+    height: 100%;
+    font-size: 13px;
   }
 `

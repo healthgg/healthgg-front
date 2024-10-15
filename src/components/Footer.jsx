@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MdOutlineEmail } from 'react-icons/md'
-import { iconGithub, iconKakao } from 'assets/icon'
+import { iconGithub, iconKakao, iconForm } from 'assets/icon'
 
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
@@ -157,9 +157,15 @@ const Footer = () => {
           <MainFooterSection>
             <p>운동 기구 및 영양소 추가 문의</p>
             <div>
-              <a href="mailto:ystar5008@naver.com">
-                <StyledEmail />
-              </a>
+              <IconBtn type="button">
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdfevqhv8qujIZ1yUI_Niuzeu2OEbKo3SST9LTXLCu-WwzEjQ/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={iconForm} alt="구글폼 로고" />
+                </a>
+              </IconBtn>
               <IconBtn type="button">
                 <a href="https://open.kakao.com/o/gaFKNPQg" target="_blank" rel="noopener noreferrer">
                   <img src={iconKakao} alt="카카오톡 로고" />

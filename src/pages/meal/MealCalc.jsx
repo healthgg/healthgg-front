@@ -1,24 +1,69 @@
-import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { userMealListState } from 'atoms/mealAtom'
+import { useState, useEffect } from 'react'
+import { useRecoilValue, useRecoilState } from 'recoil'
+import { userMealListState, userMealExcelState } from 'atoms/mealAtom'
+
+import { useMutation } from '@tanstack/react-query'
+import { postMealDownload } from 'api/meal'
 
 import styled from 'styled-components'
 
 import { v4 as uuidv4 } from 'uuid'
+import { saveAs } from 'file-saver'
 
-import { DetailCard } from 'components'
+import { DetailCard, Button } from 'components'
 import { BREAKFAST, LUNCH, DINNER } from 'constants/responseKeys'
 
 const MealCalc = () => {
-  const [curSubTab, setCurSubTab] = useState(BREAKFAST)
   const userMealList = useRecoilValue(userMealListState)
+  const [userMealExcel, setUserMealExcel] = useRecoilState(userMealExcelState)
+  const [curSubTab, setCurSubTab] = useState(BREAKFAST)
 
   const repastList = [BREAKFAST, LUNCH, DINNER]
+
+  const mutation = useMutation({
+    mutationFn: (data) => postMealDownload(data),
+    onSuccess: (res) => {
+      const filename = 'healthgg_meal_volume.xlsx'
+      saveAs(new Blob([res.data]), filename)
+    },
+    onError: (err) => {
+      console.error('postMealShare err', err)
+    },
+  })
+
+  const downloadExcel = () => {
+    mutation.mutate({ data: userMealExcel })
+  }
+
+  useEffect(() => {
+    const mealExcelData = Object.entries(userMealList).reduce(
+      (acc, [key, values]) => {
+        const targetKey = key === BREAKFAST ? 'Breakfast' : key === LUNCH ? 'Lunch' : 'Dinner'
+        values.forEach((val) => {
+          acc[targetKey].push({
+            food_name: val.food_name,
+            calory: +val.nutrient.calory,
+            protein: +val.nutrient.protein,
+            carbohydrate: +val.nutrient.carbohydrate,
+            fat: +val.nutrient.fat,
+          })
+        })
+        return acc
+      },
+      {
+        Breakfast: [],
+        Lunch: [],
+        Dinner: [],
+      },
+    )
+    setUserMealExcel(mealExcelData)
+  }, [userMealList])
 
   return (
     <>
       <WrapExcelSection>
         <SectionTitleH1>영양성분 계산하기</SectionTitleH1>
+        <Button onClick={() => downloadExcel()}>엑셀파일 다운로드</Button>
       </WrapExcelSection>
       <section>
         <SectionTitleH1>총 섭취량</SectionTitleH1>
@@ -69,7 +114,16 @@ const MealCalc = () => {
 export default MealCalc
 
 const WrapExcelSection = styled.section`
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 30px;
+  & > button {
+    padding: 8px 12px;
+    background-color: #207345;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+    color: white;
+  }
 `
 
 const SectionTitleH1 = styled.h1`
@@ -113,30 +167,36 @@ const SelectedTable = styled.table`
   }
   th,
   td {
-    padding: 5px;
-    font-size: 12px;
+    padding: 8px 0px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
     text-align: center;
+  }
+  td {
+    color: ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
 const WrapCardsDiv = styled.div`
   & > ul {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 15px;
     margin-top: 20px;
     width: 100%;
     & > li {
       display: flex;
-      padding: 10px;
-      gap: 8px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      gap: 20px;
+      max-width: 300px;
       background-color: ${({ theme }) => theme.colors.bgWhite};
       border: 1px solid #cacaca;
       border-radius: 5px;
       img {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
         border: 1px solid #cacaca;
       }
       div {
@@ -144,10 +204,10 @@ const WrapCardsDiv = styled.div`
         p {
           display: flex;
           span {
-            font-size: 12px !important;
+            font-size: 14px !important;
           }
           span:first-child {
-            width: 50px;
+            width: 70px;
           }
         }
       }

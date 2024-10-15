@@ -10,7 +10,7 @@ const QuadImages = ({ urlArrs }) => {
   return (
     <QuadImagesWrap>
       {srcArrs.map((url) => (
-        <Image key={uuidv4()} src={url} alt="사분할 이미지" />
+        <Image key={uuidv4()} width="95px" height="70px" src={url} alt="사분할 이미지" />
       ))}
     </QuadImagesWrap>
   )
@@ -22,9 +22,7 @@ const QuadImagesWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  width: 190px;
+  height: 140px;
   overflow: hidden;
-  & > img {
-    width: 100%;
-    height: 100%;
-  }
 `

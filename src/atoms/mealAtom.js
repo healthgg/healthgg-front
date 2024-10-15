@@ -10,6 +10,17 @@ export const userMealListState = atom({
   },
 })
 
+export const userMealExcelState = atom({
+  key: 'userMealExcelState',
+  default: {
+    food_name: '',
+    calory: '',
+    protein: '',
+    carbohydrate: '',
+    fat: '',
+  },
+})
+
 export const mealGramState = atom({
   key: 'mealGramState',
   default: '',

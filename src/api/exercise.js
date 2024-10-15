@@ -1,4 +1,4 @@
-import { getRequest, postRequest } from './instance'
+import { getRequest, postRequest, postRequestExcel } from './instance'
 
 // BEST 운동볼륨 조회
 export const getExerciseBest = () => {
@@ -19,4 +19,12 @@ export const getExerciseList = (params) => {
 // 운동 공유하기
 export const postExerciseShare = (data) => {
   return postRequest(`/exercise_volume/share`, data)
+}
+
+// 운동볼륨 엑셀 다운로드
+export const postExerciseDownload = (data) => {
+  // Blob 형식으로 받기 위해 responseType을 'blob'으로 설정
+  return postRequestExcel(`/exercise_volume/excel`, data, {
+    responseType: 'blob',
+  })
 }
