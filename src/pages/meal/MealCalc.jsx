@@ -42,10 +42,10 @@ const MealCalc = () => {
         values.forEach((val) => {
           acc[targetKey].push({
             food_name: val.food_name,
-            calory: val.nutrient.calory,
-            protein: val.nutrient.protein,
-            carbohydrate: val.nutrient.carbohydrate,
-            fat: val.nutrient.fat,
+            calory: +val.nutrient.calory,
+            protein: +val.nutrient.protein,
+            carbohydrate: +val.nutrient.carbohydrate,
+            fat: +val.nutrient.fat,
           })
         })
         return acc
