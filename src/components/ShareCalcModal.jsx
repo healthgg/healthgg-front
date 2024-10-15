@@ -99,6 +99,7 @@ const ShareCalcModal = ({ dataFlag, onClose }) => {
           }
         : userExerciseList,
     }
+    console.log({ data })
     mutation.mutate({ data })
   }
 
@@ -197,11 +198,11 @@ const CalcDataSection = styled.section`
   transform: translateX(-50%) translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
   width: 70%;
   height: fit-content;
-  max-height: 600px;
-  padding: 20px 30px;
+  max-height: 720px;
+  padding: 50px 30px;
   background: white;
   border-radius: 5px;
   text-align: center;
@@ -220,6 +221,9 @@ const CalcDataSection = styled.section`
 `
 
 const WrapQuadImgDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   img {
     width: 100%;
     height: 100%;
@@ -233,13 +237,14 @@ const WrapInputDiv = styled.div`
     display: none;
   }
   & > input {
-    padding: 10px 40px 10px 10px;
+    padding: 12px 10px;
     width: 100%;
     border-radius: 5px;
-    background-color: ${({ theme }) => theme.colors.bgWhite};
+    background-color: ${({ theme }) => theme.colors.bgWhite};\
+    margint-top: 12px
   }
   & > input:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -250,7 +255,7 @@ const WrapTxtAreaDiv = styled.div`
     display: none;
   }
   & > textarea {
-    padding: 10px 30px 10px 10px;
+    padding: 12px 10px;
     width: 100%;
     height: 100px;
     border-radius: 5px;
@@ -263,7 +268,7 @@ const WrapTxtAreaDiv = styled.div`
     }
   }
   & > textarea:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -292,7 +297,8 @@ const WrapCtaDiv = styled.div`
   justify-content: center;
   gap: 15px;
   & > button {
-    padding: 5px 8px;
-    font-size: 14px;
+    padding: 6px 16px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
   }
 `

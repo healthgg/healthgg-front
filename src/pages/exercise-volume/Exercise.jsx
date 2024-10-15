@@ -209,6 +209,11 @@ const SelectedContDiv = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  & > img {
+    border: 2px solid #c9c9c9;
+    border-radius: 3px;
+  }
 `
 
 const CloseButton = styled.button`

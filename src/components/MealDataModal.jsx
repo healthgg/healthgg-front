@@ -102,8 +102,8 @@ const MealDataSection = styled.section`
   gap: 20px;
   width: 70%;
   height: fit-content;
-  max-height: 600px;
-  padding: 20px 30px;
+  max-height: 720px;
+  padding: 50px 30px;
   background: white;
   border-radius: 5px;
   text-align: center;
@@ -126,7 +126,7 @@ const MealDataSection = styled.section`
 
 const MealDescP = styled.p`
   margin-top: -10px;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.fontSize.regular};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   text-align: justify;
 `
@@ -134,16 +134,21 @@ const MealDescP = styled.p`
 const WrapInputDiv = styled.div`
   position: relative;
   & > label {
-    display: none;
+    display: inline-block;
+    margin-bottom: 8px;
+    width: 100%;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+    text-align: left;
   }
   & > input {
-    padding: 10px;
+    padding: 12px 10px;
     width: 100%;
     border-radius: 5px;
     background-color: ${({ theme }) => theme.colors.bgWhite};
   }
   & > input:focus {
-    outline: none;
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
@@ -168,9 +173,9 @@ const WrapGramBtnDiv = styled.div`
 `
 
 const NutritinalInfoTitle = styled.p`
-  margin-bottom: 8px;
+  margin-top: 10px;
   text-align: left;
-  font-size: 15px;
+  font-size: ${({ theme }) => theme.fontSize.regular};
   font-weight: ${({ theme }) => theme.fontWeight.subTitle};
 `
 
@@ -178,16 +183,23 @@ const NutritinalInfoUl = styled.ul`
   display: flex;
   border: 1px solid #cacaca;
   border-radius: 5px;
+  margin-top: 8px;
   & li {
     flex: 1;
+    padding: 5px;
     & > span {
       display: inline-block;
-      font-size: 12px;
-      padding: 5px;
+      font-size: 14px;
+      font-weight: ${({ theme }) => theme.fontWeight.subTitle};
+      margin: 5px 0px;
     }
     & > span:first-child {
       width: 100%;
       border-bottom: 1px solid #cacaca;
+    }
+    & > span:last-child {
+      font-weight: ${({ theme }) => theme.fontWeight.medium};
+      color: ${({ theme }) => theme.colors.mainBlue};
     }
   }
 `
@@ -195,9 +207,11 @@ const NutritinalInfoUl = styled.ul`
 const WrapCtaDiv = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 12px;
   gap: 15px;
   & > button {
-    padding: 5px 8px;
-    font-size: 14px;
+    padding: 6px 16px;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
   }
 `

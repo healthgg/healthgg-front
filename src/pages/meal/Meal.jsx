@@ -204,6 +204,15 @@ const SelectedUl = styled.ul`
   min-height: 128px;
   border-radius: 5px;
   background-color: ${({ theme }) => theme.colors.bgWhite};
+  & > p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: ${({ theme }) => theme.fontSize.regular};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+    color: ${({ theme }) => theme.colors.bgGray};
+  }
 `
 
 const SelectedContDiv = styled.div`
@@ -216,6 +225,10 @@ const SelectedContDiv = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  & > img {
+    border: 2px solid #c9c9c9;
+    border-radius: 3px;
   }
 `
 
@@ -247,7 +260,6 @@ const ItemsDiv = styled.div`
 const ContentCardWrap = styled.div`
   overflow: hidden;
   & > p {
-    margin-top: 8px;
     width: 100%;
     font-size: 16px;
     white-space: nowrap;
@@ -272,8 +284,8 @@ const TitleH2 = styled.h2`
   & + button {
     display: flex;
     align-items: center;
-    padding: 0 4px;
-    height: 18px;
-    font-size: 11px;
+    padding: 4px 8px;
+    height: 100%;
+    font-size: 13px;
   }
 `
