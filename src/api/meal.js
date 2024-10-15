@@ -23,13 +23,8 @@ export const postMealShare = (data) => {
 
 // 식단 엑셀 다운로드
 export const postMealDownload = (data) => {
-  return postRequest(`/food/excel`, data)
+  // Blob 형식으로 받기 위해 responseType을 'blob'으로 설정
+  return postRequest(`/exercise_volume/excel`, data, {
+    responseType: 'blob',
+  })
 }
-
-// 식단 엑셀 다운로드
-// export const postMealDownload = (data) => {
-//   // Blob 형식으로 받기 위해 responseType을 'blob'으로 설정
-//   return postRequest(`/exercise_volume/excel`, data, {
-//     responseType: 'blob',
-//   })
-// }
