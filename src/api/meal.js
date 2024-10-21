@@ -28,3 +28,8 @@ export const postMealDownload = (data) => {
     responseType: 'blob',
   })
 }
+
+// 식단 영양소 검색
+export const getNutrientSearch = (params) => {
+  return getRequest(`/food?search=${params.keyword}`)
+}

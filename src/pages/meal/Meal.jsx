@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { userMealListState, mealGramState } from 'atoms/mealAtom'
 
 import { v4 as uuidv4 } from 'uuid'
 
-import { useQuery } from '@tanstack/react-query'
-import { getNutrientList } from 'api/meal'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getNutrientList, getNutrientSearch } from 'api/meal'
 
 import styled from 'styled-components'
 import { IoCloseOutline } from 'react-icons/io5'
@@ -18,8 +18,10 @@ const Meal = () => {
   const [curSubTab, setCurSubTab] = useState(BREAKFAST)
   const [curClickedObj, setCurClickedObj] = useState({})
   const [userMealList, setUserMealList] = useRecoilState(userMealListState)
+  const [mealList, setMealList] = useState([])
   const [grams, setGrams] = useRecoilState(mealGramState)
-  const [keyword, setKeyword] = useState('')
+  const [inputTxt, setInputTxt] = useState('') // 실시간 input 입력값
+  const [keyword, setKeyword] = useState('') // 검색용 keyword
   const [showMealModal, setShowMealModal] = useState(false)
 
   const nutrientList = [
@@ -31,11 +33,24 @@ const Meal = () => {
   ]
   const repastList = [BREAKFAST, LUNCH, DINNER]
 
-  const { data, isLoading, isSuccess, isError, error } = useQuery({
+  const { data, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['getNutrientList', curMainTab],
     queryFn: () => getNutrientList({ type: curMainTab, take: 99, cursorId: 9999 }),
     throwOnError: (err) => console.error(err),
   })
+
+  useEffect(() => {
+    if (isSuccess) {
+      setMealList(data)
+    }
+  }, [data, isSuccess])
+
+  // inputTxt가 빈문자열일 때 영양소 목록 재조회
+  useEffect(() => {
+    if (!keyword) {
+      refetch()
+    }
+  }, [keyword, refetch])
 
   // 탭 설정
   const setCurTab = (tabType, value) => (tabType === 'main' ? setCurMainTab(value) : setCurSubTab(value))
@@ -53,7 +68,7 @@ const Meal = () => {
   }
 
   // 선택한 식단 리스트 저장/삭제
-  const setMealList = (setType, selectedData) => {
+  const setUserMealListHandler = (setType, selectedData) => {
     if (setType === 'add') {
       if (userMealList[curSubTab].length > 5) {
         alert('끼니 당 식단은 6개까지만 가능합니다.')
@@ -82,6 +97,57 @@ const Meal = () => {
 
     setGrams('')
     setShowMealModal(false)
+  }
+
+  // 검색(5): mutation
+  const searchMutation = useMutation({
+    mutationFn: (params) => getNutrientSearch(params),
+    onSuccess: (res) => setMealList(res),
+    onError: (err) => console.error(err),
+  })
+
+  // 검색(4): keyword값이 변경될 때마다 유효성 검증 후 조회
+  useEffect(() => {
+    const keywordHandler = () => {
+      if (!/^[ㄱ-ㅎ가-힣0-9]*$|^[a-zA-Z0-9]*$/g.test(inputTxt)) {
+        alert('검색어는 한글과 영문을 혼합하거나 특수문자, 공백을 포함할 수 없습니다.')
+        setInputTxt('')
+        setKeyword('')
+        return
+      }
+      searchMutation.mutate({ keyword })
+    }
+    if (!keyword) return
+    keywordHandler()
+  }, [keyword])
+
+  // 검색(3): 커스텀 디바운스 함수, 리턴문에 의해 아래의 함수 반환
+  const debounce = (callback, delay) => {
+    let timerId = null
+    return (...args) => {
+      if (timerId) clearTimeout(timerId)
+      timerId = setTimeout(() => {
+        callback(...args)
+      }, delay)
+    }
+  }
+
+  // 검색(2): 키워드 데이터 세팅 시 디바운스 함수 호출
+  const setKeywordData = useCallback(
+    debounce((txt) => {
+      setKeyword(txt)
+    }, 1000),
+    [],
+  )
+
+  // 검색(1): input 값이 바뀔 때 userInput과 디바운스 함수에 해당 값 전달
+  const onChangeKeyword = (e) => {
+    if (!e.target.value) {
+      setInputTxt('')
+      setKeyword('')
+    }
+    setInputTxt(e.target.value)
+    setKeywordData(e.target.value)
   }
 
   return isLoading ? (
@@ -114,7 +180,7 @@ const Meal = () => {
               <SelectedContDiv>
                 <p>{list.food_name}</p>
                 <Image src={list[FOOD_IMG_ARR_KEY]} alt={`${list.food_name} 이미지`} width={85} height={60} />
-                <CloseButton type="button" onClick={() => setMealList('remove', list)}>
+                <CloseButton type="button" onClick={() => setUserMealListHandler('remove', list)}>
                   <IoCloseOutline />
                 </CloseButton>
               </SelectedContDiv>
@@ -124,10 +190,10 @@ const Meal = () => {
           <p>추가할 식단을 선택해주세요.</p>
         )}
       </SelectedUl>
-      {/* <input value={onChangeKeyword} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeWord} /> */}
+      <input value={inputTxt} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeKeyword} />
       <ItemsDiv>
-        {data &&
-          data.map((list) => (
+        {mealList &&
+          mealList.map((list) => (
             <ContentCardWrap key={uuidv4()}>
               <Image src={list[FOOD_IMG_ARR_KEY]} alt={`${list?.food_name} 이미지`} />
               <TitleDiv>
@@ -145,7 +211,7 @@ const Meal = () => {
           portalType="mealModal"
           data={curClickedObj}
           onClose={toggleMealModal}
-          onClick={() => setMealList('add', curClickedObj)}
+          onClick={() => setUserMealListHandler('add', curClickedObj)}
         />
       )}
     </>
