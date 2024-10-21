@@ -71,6 +71,12 @@ const CardLi = styled.li`
   display: flex;
   align-items: center;
   gap: 40px;
+
+  img {
+    border: 1px solid #bfbfbf;
+    border-radius: 5px;
+  }
+
   & > div {
     display: flex;
     flex-direction: column;
