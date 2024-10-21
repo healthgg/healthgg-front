@@ -36,6 +36,7 @@ const Meal = () => {
   const { data, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['getNutrientList', curMainTab],
     queryFn: () => getNutrientList({ type: curMainTab, take: 99, cursorId: 9999 }),
+    enabled: inputTxt === '',
     throwOnError: (err) => console.error(err),
   })
 
@@ -47,10 +48,10 @@ const Meal = () => {
 
   // inputTxt가 빈문자열일 때 영양소 목록 재조회
   useEffect(() => {
-    if (!keyword) {
+    if (!inputTxt) {
       refetch()
     }
-  }, [keyword, refetch])
+  }, [inputTxt, refetch])
 
   // 탭 설정
   const setCurTab = (tabType, value) => (tabType === 'main' ? setCurMainTab(value) : setCurSubTab(value))
@@ -190,7 +191,9 @@ const Meal = () => {
           <p>추가할 식단을 선택해주세요.</p>
         )}
       </SelectedUl>
-      <input value={inputTxt} autoComplete="on" maxLength={30} placeholder="하이" onChange={onChangeKeyword} />
+
+      <input value={inputTxt} autoComplete="on" maxLength={30} placeholder="식단 검색" onChange={onChangeKeyword} />
+
       <ItemsDiv>
         {mealList &&
           mealList.map((list) => (
