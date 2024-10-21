@@ -34,9 +34,8 @@ const Meal = () => {
   const repastList = [BREAKFAST, LUNCH, DINNER]
 
   const { data, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['getNutrientList', curMainTab],
+    queryKey: ['getNutrientList', curMainTab, inputTxt === '' ? 'empty' : 'filled'],
     queryFn: () => getNutrientList({ type: curMainTab, take: 99, cursorId: 9999 }),
-    enabled: inputTxt === '',
     throwOnError: (err) => console.error(err),
   })
 
@@ -192,7 +191,7 @@ const Meal = () => {
         )}
       </SelectedUl>
 
-      <input value={inputTxt} autoComplete="on" maxLength={30} placeholder="식단 검색" onChange={onChangeKeyword} />
+      <Input value={inputTxt} autoComplete="on" maxLength={30} placeholder="식단 검색" onChange={onChangeKeyword} />
 
       <ItemsDiv>
         {mealList &&
@@ -281,6 +280,18 @@ const SelectedUl = styled.ul`
     font-size: ${({ theme }) => theme.fontSize.regular};
     font-weight: ${({ theme }) => theme.fontWeight.regular};
     color: ${({ theme }) => theme.colors.bgGray};
+  }
+`
+
+const Input = styled.input`
+  margin-top: 20px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.colors.bgWhite};
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.colors.mainBlue};
   }
 `
 
