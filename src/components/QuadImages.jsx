@@ -22,7 +22,7 @@ const QuadImagesWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  width: 190px;
+  width: 185px;
   height: 140px;
   overflow: hidden;
   border: 1px solid #c9c9c9;
