@@ -28,3 +28,8 @@ export const postExerciseDownload = (data) => {
     responseType: 'blob',
   })
 }
+
+// 운동 검색
+export const getExerciseSearch = (params) => {
+  return getRequest(`/fitness_machine?search=${params.keyword}`)
+}

@@ -194,7 +194,7 @@ const Meal = () => {
       <Input value={inputTxt} autoComplete="on" maxLength={30} placeholder="식단 검색" onChange={onChangeKeyword} />
 
       <ItemsDiv>
-        {mealList &&
+        {mealList.length &&
           mealList.map((list) => (
             <ContentCardWrap key={uuidv4()}>
               <Image src={list[FOOD_IMG_ARR_KEY]} alt={`${list?.food_name} 이미지`} />
