@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
+
 import styled from 'styled-components'
-import InputBox from 'components/InputBox'
-import { PageTitle } from 'components'
-import RadioButton from 'components/RadioButton'
-import WeightButton from 'components/WeightButton'
+import { InputBox, RadioButton, WeightButton, PageTitle, Portal } from 'components'
+
 import { useRecoilState } from 'recoil'
 import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/onermAtom'
 
@@ -12,6 +11,9 @@ const OnermCalc = () => {
   const [reps, setReps] = useRecoilState(onermRepsState)
   const [oneRm, setOneRm] = useRecoilState(onermValueState)
   const [selectedExercise, setSelectedExercise] = useRecoilState(onermExerciseState)
+
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const exercises = [
     { name: '데드리프트', value: oneRm.deadlift },
@@ -26,7 +28,7 @@ const OnermCalc = () => {
     const numeberValue = +value
 
     if (Number.isNaN(numeberValue)) {
-      alert('숫자만 입력가능 합니다')
+      setErrorMsg('숫자만 입력가능 합니다.')
       return
     }
 
@@ -37,7 +39,7 @@ const OnermCalc = () => {
     }
 
     if (numeberValue > 10) {
-      alert('횟수는 10이하여야 합니다')
+      setErrorMsg('횟수는 10이하여야 합니다.')
       return
     }
 
@@ -54,16 +56,20 @@ const OnermCalc = () => {
       setWeight('')
     }
     if (numeberValue > 1000) {
-      alert('당신은 로니콜먼이 아닙니다')
+      setErrorMsg('당신은 로니콜먼이 아닙니다.')
       return
     }
 
     if (Number.isNaN(numeberValue)) {
-      alert('숫자만 입력가능 합니다')
+      setErrorMsg('숫자만 입력가능 합니다.')
       return
     }
     setWeight(value)
   }
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   return (
     <Container>
@@ -118,6 +124,7 @@ const OnermCalc = () => {
           ))}
         </tbody>
       </Table>
+      {showErrorModal && <Portal portalType="errorModal" data={{ errorMsg }} onClose={() => setErrorMsg('')} />}
     </Container>
   )
 }

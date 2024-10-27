@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { mealGramState } from 'atoms/mealAtom'
 
 import { v4 as uuidv4 } from 'uuid'
 
 import styled from 'styled-components'
+import { imgError } from 'assets/img'
 import { IoCloseOutline } from 'react-icons/io5'
 
 import { FOOD_IMG_ARR_KEY } from 'constants/responseKeys'
@@ -13,6 +15,8 @@ import Button from './Button'
 
 const MealDataModal = ({ data, onClose, onClick }) => {
   const [grams, setGrams] = useRecoilState(mealGramState)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const gramBtnList = [10, 50, 100]
   const nutritinalList = [
@@ -28,9 +32,13 @@ const MealDataModal = ({ data, onClose, onClick }) => {
     if (regex.test(txt)) {
       setGrams(txt)
     } else {
-      alert('0부터 9999까지의 숫자만 입력 가능합니다.')
+      setErrorMsg('0부터 9999까지의 숫자만\n입력 가능합니다.')
     }
   }
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   const onClickGram = (num) => setGrams((prev) => +prev + num)
 
@@ -71,12 +79,23 @@ const MealDataModal = ({ data, onClose, onClick }) => {
           </NutritinalInfoUl>
         </div>
         <WrapCtaDiv>
-          <Button color="mainBlue" onClick={onClick}>
+          <Button color="mainBlue" onClick={onClick} disabled={showErrorModal}>
             추가
           </Button>
-          <Button onClick={onClose}>취소</Button>
+          <Button onClick={onClose} disabled={showErrorModal}>
+            취소
+          </Button>
         </WrapCtaDiv>
       </MealDataSection>
+      {showErrorModal && (
+        <ErrorSection>
+          <Image src={imgError} alt="에러 이미지" width="100px" height="100px" />
+          <h1>{errorMsg}</h1>
+          <Button color="mainBlue" width="regular" height="regular" onClick={() => setErrorMsg('')}>
+            확인
+          </Button>
+        </ErrorSection>
+      )}
     </BackgroundDiv>
   )
 }
@@ -215,5 +234,33 @@ const WrapCtaDiv = styled.div`
     padding: 6px 16px;
     font-size: ${({ theme }) => theme.fontSize.regular};
     font-weight: ${({ theme }) => theme.fontWeight.medium};
+  }
+`
+
+const ErrorSection = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  width: 70%;
+  height: fit-content;
+  height: 300px;
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 5px 5px 30px 15px;
+  z-index: 1;
+  & > h1 {
+    font-size: ${({ theme }) => theme.fontSize.medium};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+    text-align: center;
+    white-space: pre;
+  }
+  & > button {
   }
 `

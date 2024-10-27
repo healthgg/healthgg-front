@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
+
 import styled from 'styled-components'
-import { PageTitle } from 'components'
-import WeightButton from 'components/WeightButton'
-import RadioButton from 'components/RadioButton'
-import InputBox from 'components/InputBox'
+import { PageTitle, WeightButton, RadioButton, InputBox, Portal } from 'components'
+
 import { useRecoilState } from 'recoil'
 import { proteinPurpose, proteinGender, proteinWeight, proteinResult } from 'atoms/proteinAtom'
 
@@ -12,6 +11,9 @@ const ProteinCalc = () => {
   const [gender, setGender] = useRecoilState(proteinGender)
   const [weight, setWeight] = useRecoilState(proteinWeight)
   const [proteinIntake, setProteinIntake] = useRecoilState(proteinResult)
+
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleWeightChange = (e) => {
     const { value } = e.target
@@ -23,12 +25,17 @@ const ProteinCalc = () => {
     }
 
     if (Number.isNaN(numeberValue)) {
-      alert('숫자만 입력가능 합니다')
+      setErrorMsg('숫자만 입력가능 합니다')
       return
     }
 
     setWeight(value)
   }
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
+
   return (
     <Container>
       <PageTitle size="h2">
@@ -90,10 +97,9 @@ const ProteinCalc = () => {
           label="여"
         />
       </RadioWrapper>
-
       <InputBox type="number" id="weight" value={weight} onChange={handleWeightChange} placeholder="몸무게" />
-
       <WeightButton setWeight={setWeight} />
+      {showErrorModal && <Portal portalType="errorModal" data={{ errorMsg }} onClose={() => setErrorMsg('')} />}
     </Container>
   )
 }
