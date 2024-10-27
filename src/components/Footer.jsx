@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { userMealListState } from 'atoms/mealAtom'
 import { userExerciseListState } from 'atoms/exerciseAtom'
-
 import { onermWeightState, onermRepsState, onermExerciseState, onermValueState } from 'atoms/onermAtom'
 import { proteinPurpose, proteinGender, proteinWeight, proteinResult } from 'atoms/proteinAtom'
 
@@ -38,6 +37,8 @@ const Footer = () => {
   const [proteinIntake, setProteinIntake] = useRecoilState(proteinResult)
 
   const [showShareCalcModal, setShowShareCalcModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const toggleShareCalcModal = () => setShowShareCalcModal(!showShareCalcModal)
 
@@ -73,13 +74,13 @@ const Footer = () => {
     if (pathname === '/meal') {
       const hasAllValues = Object.values(userMealList).every((items) => items.length > 0)
       if (!hasAllValues) {
-        alert('아침, 점심, 저녁 식단을 각각 1개 이상 선택해주세요.')
+        setErrorMsg('아침, 점심, 저녁 식단을\n각각 1개 이상 선택해주세요.')
         return
       }
       navigate('/meal/calc')
     } else if (pathname === '/exercise-volume') {
       if (!userExerciseList.length) {
-        alert('운동을 1개 이상 선택해주세요.')
+        setErrorMsg('운동을 1개 이상\n선택해주세요.')
         return
       }
       navigate('/exercise-volume/calc')
@@ -87,7 +88,7 @@ const Footer = () => {
       const purposeArr = ['muscle_gain', 'diet', 'weight_maintenance']
       // 프로틴 계산 로직 추가
       if (weight === '' || Number(weight) === 0) {
-        alert('몸무게를 입력하세요')
+        setErrorMsg('몸무게를 입력하세요.')
         return
       }
 
@@ -121,14 +122,14 @@ const Footer = () => {
     if (pathname === '/meal/calc') {
       const hasAllValues = Object.values(userMealList).every((items) => items.length > 0)
       if (!hasAllValues) {
-        alert('공유할 식단이 없습니다. 이전 페이지로 이동합니다.')
+        setErrorMsg('공유할 식단이 없습니다.\n이전 페이지로 이동합니다.')
         navigate('/meal')
         return
       }
       toggleShareCalcModal()
     } else if (pathname === '/exercise-volume/calc') {
       if (!userExerciseList.length) {
-        alert('공유할 운동이 없습니다. 이전 페이지로 이동합니다.')
+        setErrorMsg('공유할 운동이 없습니다.\n이전 페이지로 이동합니다.')
         navigate('/exercise-volume')
         return
       }
@@ -149,6 +150,10 @@ const Footer = () => {
       setFooter('main')
     }
   }, [pathname])
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   return (
     <>
@@ -218,6 +223,7 @@ const Footer = () => {
           onClose={() => setShowShareCalcModal(false)}
         />
       )}
+      {showErrorModal && <Portal portalType="errorModal" data={{ errorMsg }} onClose={() => setErrorMsg('')} />}
     </>
   )
 }

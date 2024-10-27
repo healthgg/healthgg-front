@@ -1,8 +1,16 @@
 import styled from 'styled-components'
 
-const Button = ({ size, width, height, color, children, onClick }) => {
+const Button = ({ size, width, height, color, children, onClick, disabled }) => {
   return (
-    <ButtonWrap type="button" size={size} width={width} height={height} color={color} onClick={onClick}>
+    <ButtonWrap
+      type="button"
+      size={size}
+      width={width}
+      height={height}
+      color={color}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </ButtonWrap>
   )
@@ -18,4 +26,5 @@ const ButtonWrap = styled.button`
   color: ${({ theme, color }) => (color ? 'white' : theme.colors.typoBlack)};
   background-color: ${({ theme, color }) => (color ? theme.colors.mainBlue : theme.colors.bgWhite)};
   border-radius: ${({ height }) => (height === 'footer' ? '3px 5px 0 0' : '5px')};
+  filter: ${({ disabled }) => (disabled ? 'grayscale(1)' : 'graycale(0)')};
 `

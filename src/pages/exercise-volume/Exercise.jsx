@@ -15,14 +15,19 @@ import { EXERCISE_IMG_KEY } from 'constants/responseKeys'
 
 const Exercise = () => {
   const [curMainTab, setCurMainTab] = useState('0')
+
   const [curClickedObj, setCurClickedObj] = useState({})
   const [userExerciseList, setUserExerciseList] = useRecoilState(userExerciseListState)
   const [exerciseList, setExerciseList] = useState([])
   const [eachTotWeight, setEachTotWeight] = useRecoilState(eachTotalWeightState)
   const [grams, setGrams] = useRecoilState(exerciseGramState)
+
   const [inputTxt, setInputTxt] = useState('') // 실시간 input 입력값
   const [keyword, setKeyword] = useState('') // 검색용 keyword
+
   const [showExerciseModal, setShowExerciseModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const nutrientList = [
     { tabId: '0', tabName: '전체' },
@@ -78,14 +83,14 @@ const Exercise = () => {
   const setUserExerciseListHandler = (setType, selectedData) => {
     if (setType === 'add') {
       if (userExerciseList.length > 8) {
-        alert('운동 갯수는 9개까지만 가능합니다.')
+        setErrorMsg('운동 갯수는\n9개까지만 가능합니다.')
         resetGrams()
         setShowExerciseModal(false)
         return
       }
 
       if (Object.values(grams).some((num) => !num)) {
-        alert('운동 볼륨을 모두 입력해주세요.')
+        setErrorMsg('운동 볼륨을 모두 입력해주세요.')
         return
       }
     }
@@ -118,7 +123,7 @@ const Exercise = () => {
   useEffect(() => {
     const keywordHandler = () => {
       if (!/^[ㄱ-ㅎ가-힣0-9]*$|^[a-zA-Z0-9]*$/g.test(inputTxt)) {
-        alert('검색어는 한글과 영문을 혼합하거나 특수문자, 공백을 포함할 수 없습니다.')
+        setErrorMsg('검색어는 한글과 영문을 혼합하거나 특수문자, 공백을 포함할 수 없습니다.')
         setInputTxt('')
         setKeyword('')
         return
@@ -157,6 +162,10 @@ const Exercise = () => {
     setInputTxt(e.target.value)
     setKeywordData(e.target.value)
   }
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   return isLoading ? (
     <Loading />
@@ -220,6 +229,7 @@ const Exercise = () => {
           onClick={() => setUserExerciseListHandler('add', curClickedObj)}
         />
       )}
+      {showErrorModal && <Portal portalType="errorModal" data={{ errorMsg }} onClose={() => setErrorMsg('')} />}
     </>
   )
 }

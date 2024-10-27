@@ -1,10 +1,9 @@
-import { useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { exerciseGramState, eachTotalWeightState } from 'atoms/exerciseAtom'
 
-import { v4 as uuidv4 } from 'uuid'
-
 import styled from 'styled-components'
+import { imgError } from 'assets/img'
 import { IoCloseOutline } from 'react-icons/io5'
 
 import { EXERCISE_IMG_KEY } from 'constants/responseKeys'
@@ -15,6 +14,8 @@ import Button from './Button'
 const ExerciseDataModal = ({ data, onClose, onClick }) => {
   const [grams, setGrams] = useRecoilState(exerciseGramState)
   const [eachTotWeight, setEachTotWeight] = useRecoilState(eachTotalWeightState)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const exercisePlanList = [
     { id: 'reps', name: '횟수', placeholder: '세트 당 횟수를 적어주세요.' },
@@ -41,7 +42,7 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
     const regex = /^(0|[1-9]\d{0,3}|)$/
     const isNotNumber = Object.values(grams).some((txt) => !regex.test(txt))
     if (isNotNumber) {
-      alert('0부터 9999까지의 숫자만 입력 가능합니다.')
+      setErrorMsg('0부터 9999까지의 숫자만\n입력 가능합니다.')
       return
     }
     onClick()
@@ -52,6 +53,10 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
     const totalWeight = (+reps || 0) * (+weight || 0) * (+sets || 0)
     setEachTotWeight(totalWeight)
   }, [grams, setEachTotWeight])
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   return (
     <BackgroundDiv>
@@ -77,12 +82,23 @@ const ExerciseDataModal = ({ data, onClose, onClick }) => {
         </WrapInputDiv>
         <TotalWeightP>총 중량 {eachTotWeight}kg</TotalWeightP>
         <WrapCtaDiv>
-          <Button color="mainBlue" onClick={validInput}>
+          <Button color="mainBlue" onClick={validInput} disabled={showErrorModal}>
             추가
           </Button>
-          <Button onClick={onClose}>취소</Button>
+          <Button onClick={onClose} disabled={showErrorModal}>
+            취소
+          </Button>
         </WrapCtaDiv>
       </MealDataSection>
+      {showErrorModal && (
+        <ErrorSection>
+          <Image src={imgError} alt="에러 이미지" width="100px" height="100px" />
+          <h1>{errorMsg}</h1>
+          <Button color="mainBlue" width="regular" height="regular" onClick={() => setErrorMsg('')}>
+            확인
+          </Button>
+        </ErrorSection>
+      )}
     </BackgroundDiv>
   )
 }
@@ -193,5 +209,33 @@ const WrapCtaDiv = styled.div`
     padding: 6px 16px;
     font-size: ${({ theme }) => theme.fontSize.regular};
     font-weight: ${({ theme }) => theme.fontWeight.medium};
+  }
+`
+
+const ErrorSection = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  width: 70%;
+  height: fit-content;
+  height: 300px;
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 5px 5px 30px 15px;
+  z-index: 1;
+  & > h1 {
+    font-size: ${({ theme }) => theme.fontSize.medium};
+    font-weight: ${({ theme }) => theme.fontWeight.medium};
+    text-align: center;
+    white-space: pre;
+  }
+  & > button {
   }
 `

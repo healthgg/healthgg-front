@@ -16,13 +16,18 @@ import { FOOD_IMG_ARR_KEY, BREAKFAST, LUNCH, DINNER } from 'constants/responseKe
 const Meal = () => {
   const [curMainTab, setCurMainTab] = useState('0')
   const [curSubTab, setCurSubTab] = useState(BREAKFAST)
+
   const [curClickedObj, setCurClickedObj] = useState({})
   const [userMealList, setUserMealList] = useRecoilState(userMealListState)
   const [mealList, setMealList] = useState([])
   const [grams, setGrams] = useRecoilState(mealGramState)
+
   const [inputTxt, setInputTxt] = useState('') // 실시간 input 입력값
   const [keyword, setKeyword] = useState('') // 검색용 keyword
+
   const [showMealModal, setShowMealModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const nutrientList = [
     { tabId: '0', tabName: '전체' },
@@ -71,13 +76,13 @@ const Meal = () => {
   const setUserMealListHandler = (setType, selectedData) => {
     if (setType === 'add') {
       if (userMealList[curSubTab].length > 5) {
-        alert('끼니 당 식단은 6개까지만 가능합니다.')
+        setErrorMsg('끼니 당 식단은 6개까지만 가능합니다.')
         setGrams('')
         setShowMealModal(false)
         return
       }
       if (!grams) {
-        alert('섭취량(g)을 적어주세요.')
+        setErrorMsg('섭취량(g)을 적어주세요.')
         return
       }
     }
@@ -110,7 +115,7 @@ const Meal = () => {
   useEffect(() => {
     const keywordHandler = () => {
       if (!/^[ㄱ-ㅎ가-힣0-9]*$|^[a-zA-Z0-9]*$/g.test(inputTxt)) {
-        alert('검색어는 한글과 영문을 혼합하거나 특수문자, 공백을 포함할 수 없습니다.')
+        setErrorMsg('검색어는 한글과 영문을 혼합하거나 특수문자, 공백을 포함할 수 없습니다.')
         setInputTxt('')
         setKeyword('')
         return
@@ -149,6 +154,10 @@ const Meal = () => {
     setInputTxt(e.target.value)
     setKeywordData(e.target.value)
   }
+
+  useEffect(() => {
+    setShowErrorModal(!!errorMsg)
+  }, [errorMsg])
 
   return isLoading ? (
     <Loading />
@@ -216,6 +225,7 @@ const Meal = () => {
           onClick={() => setUserMealListHandler('add', curClickedObj)}
         />
       )}
+      {showErrorModal && <Portal portalType="errorModal" data={{ errorMsg }} onClose={() => setErrorMsg('')} />}
     </>
   )
 }

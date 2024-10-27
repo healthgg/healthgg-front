@@ -4,6 +4,7 @@ import Sidebar from './Sidebar'
 import MealDataModal from './MealDataModal'
 import ExerciseDataModal from './ExerciseDataModal'
 import ShareCalcModal from './ShareCalcModal'
+import ErrorModal from './ErrorModal'
 
 const Portal = ({ portalType, dataFlag, data, onClose, onClick }) => {
   const modalRoot = document.getElementById('modal')
@@ -12,6 +13,7 @@ const Portal = ({ portalType, dataFlag, data, onClose, onClick }) => {
     mealModal: <MealDataModal data={data} onClose={onClose} onClick={onClick} />,
     exerciseModal: <ExerciseDataModal data={data} onClose={onClose} onClick={onClick} />,
     shareCalcModal: <ShareCalcModal dataFlag={dataFlag} onClose={onClose} />,
+    errorModal: <ErrorModal data={data} onClose={onClose} />,
   }
 
   return createPortal(componentToRender[portalType] ?? null, modalRoot)
